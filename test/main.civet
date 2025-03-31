@@ -91,7 +91,7 @@ describe "Hera", ->
 
   it "should recursively generate itself", ->
     heraSrc := readFile('source/hera.hera')
-    {parse} := generate heraSrc
+    {parse} := generate heraSrc, tsToJs: true
 
     assert.deepEqual parse(heraSrc), parse(heraSrc)
 
@@ -203,7 +203,7 @@ describe "Hera", ->
     assert.deepEqual parse("ababccbc"), ["ab", "abcc", "bc"]
 
   it "should parse bare character classes as regexes", ->
-    newHera := generate readFile("source/hera.hera")
+    newHera := generate readFile("source/hera.hera"), tsToJs: true
 
     rules := newHera.parse """
       Rule

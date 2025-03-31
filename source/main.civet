@@ -9,10 +9,16 @@ import { createRequire } from "module"
 parser from ./hera.hera
 { compile as heraCompile, type CompilerOptions } from ./compiler.civet
 { grammarToEBNF } from ./util.civet
+{ compileTsToJs } from ./ts-to-js.mjs
 
 require := createRequire(import.meta.url)
 
-execMod := (src: string) => {
+ExecModOptions ::= { tsToJs?: boolean }
+
+execMod := (src: string, { tsToJs }: ExecModOptions = {}) => {
+  if tsToJs
+    src = compileTsToJs(src, { module: false })
+
   m := { exports: {} }
   Function("require", "module", "exports", src)(require, m, m.exports)
 
@@ -32,8 +38,8 @@ compile := (rulesOrString: HeraRules | string, options?: CompilerOptions) =>
 
 parse := parser.parse
 
-generate := <T extends HeraGrammar>(src: string) => {
-  return execMod(compile(parse(src))) as {
+generate := <T extends HeraGrammar>(src: string, options: ExecModOptions = {}) => {
+  return execMod(compile(parse(src)), options) as {
     parse: (input: string, options?: ParserOptions<T>) => unknown
   }
 }

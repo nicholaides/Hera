@@ -25,7 +25,7 @@
       "civet"
     ],
     "require": [
-      "./node_modules/@danielx/hera/register",
+      "./register-ts.js",
       "@danielx/civet/register"
     ],
     "reporter": "dot",
