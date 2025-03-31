@@ -3,7 +3,7 @@
 import { fileURLToPath, pathToFileURL } from 'url';
 
 import fs from "fs";
-import { compile } from "@danielx/hera";
+import { compile } from "../node_modules/@danielx/hera/dist/main.js";
 
 const baseURL = pathToFileURL(process.cwd() + '/').href;
 const extensionsRegex = /\.hera$/;

@@ -7,6 +7,21 @@ watch := process.argv.includes '--watch'
 minify := process.argv.includes '--minify'
 sourcemap := false
 
+// In order to compile a .hera file that contains typescrypt code, the
+// heraPlugin's onLoad needs to return with loader: 'ts'
+// Since we can't build Hera with the heraPlugin in our source code, we'll wrap
+// output of the previous release's plugin until Hera has another release then we can use that.
+heraPluginThatReturnsTs := (...options) =>
+  orig := heraPlugin(...options)
+  {
+    ...orig
+    setup: (build) =>
+      orig.setup
+        onLoad: (attrs, cb) =>
+          build.onLoad attrs, (...args) =>
+            cb(...args).then { ...&, loader: 'ts'}
+  }
+
 esbuild.build({
   entryPoints: ['source/main.civet']
   tsconfig: "./tsconfig.json"
@@ -20,7 +35,9 @@ esbuild.build({
   platform: 'node'
   outdir: 'dist/'
   plugins: [
-    heraPlugin()
+    heraPluginThatReturnsTs
+      inlineMap: true
+      module: true
     civetPlugin
       ts: "civet"
       emitDeclaration: true
