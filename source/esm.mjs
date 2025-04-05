@@ -1,9 +1,9 @@
-import { fileURLToPath, pathToFileURL } from 'url';
+import { fileURLToPath, pathToFileURL } from "url";
 
 import fs from "fs";
 import { compile } from "@danielx/hera";
 
-const baseURL = pathToFileURL(process.cwd() + '/').href;
+const baseURL = pathToFileURL(process.cwd() + "/").href;
 const extensionsRegex = /\.hera$/;
 
 export async function resolve(specifier, context, defaultResolve) {
@@ -12,7 +12,7 @@ export async function resolve(specifier, context, defaultResolve) {
   if (extensionsRegex.test(specifier)) {
     return {
       shortCircuit: true,
-      url: new URL(specifier, parentURL).href
+      url: new URL(specifier, parentURL).href,
     };
   }
 
@@ -20,24 +20,35 @@ export async function resolve(specifier, context, defaultResolve) {
   return defaultResolve(specifier, context, defaultResolve);
 }
 
-export async function load(url, context, next) {
+export async function load(
+  url,
+  context,
+  next,
+  { postProcess = (source) => source } = {}
+) {
   if (extensionsRegex.test(url)) {
     const filename = fileURLToPath(url);
-    const source = compile(fs.readFileSync(filename, 'utf8'), {
+    const source = compile(fs.readFileSync(filename, "utf8"), {
       filename,
       inlineMap: true,
       module: true,
     });
 
+    const processedSource = postProcess(source);
+
     // TODO: how to avoid shortCircuit?
     // We may want to pass the module to babel or whatever in the future
     return {
       format: "module",
-      source,
+      source: processedSource,
       shortCircuit: true,
     };
   }
 
   // Let Node.js handle all other URLs.
   return next(url, context);
+}
+
+export function buildLoadFunction(heraLoaderOptions) {
+  return (url, context, next) => load(url, context, next, heraLoaderOptions);
 }
