@@ -14,7 +14,7 @@ describe "tsc", ->
 
     it "should accept compiler options", ->
       ts := "const a = (a: number, b: number) => a + b"
-      js := compileTsToJs(ts, target: typescript.ScriptTarget.ES2022) |> removeSourceMap
+      js := compileTsToJs(ts, compilerOptions: { target: typescript.ScriptTarget.ES2022 }) |> removeSourceMap
 
       assert.equal js, "const a = (a, b) => a + b;"
 
@@ -26,6 +26,10 @@ describe "tsc", ->
 
     it "should complain about syntax errors", ->
       ts := "!!!"
+
+      logged .= ''
+
       assert.throws
-        => compileTsToJs(ts)
+        => compileTsToJs(ts, log: (message: string) => logged = message)
         Error
+      assert.match logged, /Expression expected/

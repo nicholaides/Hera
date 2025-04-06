@@ -6,5 +6,7 @@ export const resolve = heraEsm.resolve;
 
 export const load = heraEsm.buildLoadFunction({
   postProcess: (source) =>
-    compileTsToJs(source, { module: typescript.ModuleKind.ES2022 }),
+    compileTsToJs(source, {
+      compilerOptions: { module: typescript.ModuleKind.ES2022 },
+    }),
 });
