@@ -1,14 +1,9 @@
-import ts from "typescript";
-import path from "path";
+import theTs from "typescript";
 
-const tsConfig = ts.readConfigFile("tsconfig.json", ts.sys.readFile);
+export const ts = theTs;
 
-export function compileTsToJs(tsSource, options = {}) {
+export function compileTsToJs(tsSource, compilerOptions = {}) {
   return ts.transpileModule(tsSource, {
-    compilerOptions: {
-      ...tsConfig.config,
-      module: options.module ? ts.ModuleKind.ESNext : ts.ModuleKind.CommonJS,
-      noCheck: true,
-    },
+    compilerOptions: { noCheck: true, ...compilerOptions },
   }).outputText;
 }

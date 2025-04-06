@@ -9,7 +9,7 @@ import { createRequire } from "module"
 parser from ./hera.hera
 { compile as heraCompile, type CompilerOptions } from ./compiler.civet
 { grammarToEBNF } from ./util.civet
-{ compileTsToJs } from ./ts-to-js.mjs
+{ compileTsToJs, ts } from ./ts-to-js.mjs
 
 require := createRequire(import.meta.url)
 
@@ -17,7 +17,7 @@ ExecModOptions ::= { tsToJs?: boolean }
 
 execMod := (src: string, { tsToJs }: ExecModOptions = {}) => {
   if tsToJs
-    src = compileTsToJs(src, { module: false })
+    src = compileTsToJs(src, module: ts.ModuleKind.CommonJS)
 
   m := { exports: {} }
   Function("require", "module", "exports", src)(require, m, m.exports)

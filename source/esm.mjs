@@ -20,7 +20,7 @@ export async function resolve(specifier, context, defaultResolve) {
   return defaultResolve(specifier, context, defaultResolve);
 }
 
-export async function load(
+export function load(
   url,
   context,
   next,
@@ -34,7 +34,7 @@ export async function load(
       module: true,
     });
 
-    const processedSource = postProcess(source);
+    const processedSource = postProcess(source, { url, context });
 
     // TODO: how to avoid shortCircuit?
     // We may want to pass the module to babel or whatever in the future
