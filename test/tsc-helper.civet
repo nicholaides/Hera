@@ -1,11 +1,11 @@
 assert from assert
 { compileTsToJs, typescript } from '../source/tsc-helper.mjs'
 
-function removeSourceMap(sourceCode: string)
-  sourceCode.split('//#')[0].trim()
-
 describe "tsc-helper", ->
   describe "compileTsToJs", ->
+    function removeSourceMap(sourceCode: string)
+      sourceCode.split('//#')[0].trim()
+
     it "should compile TypeScript code to JavaScript", ->
       ts := "const a = (a: number, b: number) => a + b"
       js := compileTsToJs(ts) |> removeSourceMap
