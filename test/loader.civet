@@ -1,0 +1,31 @@
+assert from assert
+{ compileTsToJs, typescript } from '../source/tsc.mjs'
+
+function removeSourceMap(sourceCode: string)
+  sourceCode.split('//#')[0].trim()
+
+describe "tsc", ->
+  describe "compileTsToJs", ->
+    it "should compile TypeScript code to JavaScript", ->
+      ts := "const a = (a: number, b: number) => a + b"
+      js := compileTsToJs(ts) |> removeSourceMap
+
+      assert.equal js, "var a = function (a, b) { return a + b; };"
+
+    it "should accept compiler options", ->
+      ts := "const a = (a: number, b: number) => a + b"
+      js := compileTsToJs(ts, target: typescript.ScriptTarget.ES2022) |> removeSourceMap
+
+      assert.equal js, "const a = (a, b) => a + b;"
+
+    it "should not complain about type errors types", ->
+      ts := "const a: number = null"
+      js := compileTsToJs(ts) |> removeSourceMap
+
+      assert.equal js, "var a = null;"
+
+    it "should complain about syntax errors", ->
+      ts := "!!!"
+      assert.throws
+        => compileTsToJs(ts)
+        Error
