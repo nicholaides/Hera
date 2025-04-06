@@ -10,7 +10,9 @@ export function compileTsToJs(tsSource, {
     reportDiagnostics: true,
   });
 
-  // Its possible that when using transpileModule that it will never give warnings, only errors, but I'm not sure, so we'll log all diagnostics and only throw if there are errors.
+  // It's possible that when using transpileModule that it will never give
+  // warnings, only errors, but I'm not sure, so we'll log all diagnostics and
+  // only throw if there are errors.
   if (diagnostics?.length) {
     // always log diagnositcs
     log(
