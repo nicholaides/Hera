@@ -59,7 +59,8 @@
     "test": "c8 mocha && yarn test:typed-parser-samples && yarn test:example-loader",
     "test:typed-parser-samples": "build/typed-parser-samples && tsc -p tsconfig.parsers.json",
     "test:example-loader": "cd example-loader/ && node -r ./custom-loader-register.cjs ./custom-loader-test.mjs",
-    "test:ts-loader-usage": "cd example-loader/ && node -r ./use-ts-loader.cjs ./use-ts-loader-test.mjs"
+    "test:ts-loader-usage": "cd example-loader/ && node -r ./use-ts-loader.cjs ./use-ts-loader-test.mjs",
+    "test:register": "cd example-loader/ && node -r @danielx/hera/register ./use-register.mjs"
   },
   "bin": {
     "hera": "dist/hera"
@@ -77,7 +78,7 @@
     "./register": "./register.js",
     "./ts-loader": "./dist/ts-loader.cjs",
     "./ts-loader-hooks": "./dist/ts-loader-hooks.cjs",
-    "./esm": "./dist/esm.mjs",
+    "./esm": "./dist/esm.cjs",
     "./*": "./*",
     "./dist/*": "./dist/*"
   },

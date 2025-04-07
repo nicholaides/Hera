@@ -2,7 +2,7 @@ try {
   const { register } = require('node:module');
   const { pathToFileURL } = require('node:url');
 
-  register('./dist/esm.mjs', pathToFileURL(__filename));
+  register('./dist/esm.cjs', pathToFileURL(__filename));
 } catch (e) {
   // older Node lacking module register
 }
