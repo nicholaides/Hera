@@ -1,0 +1,7 @@
+{ register } from node:module
+ts from typescript
+
+export typescript := ts
+
+export function registerLoader(compilerOptions: ts.CompilerOptions)
+  register './ts-loader-hooks.mjs', import.meta.url, data: compilerOptions

@@ -1,0 +1,4 @@
+{ registerLoader, typescript } from ./source/ts-loader.civet
+
+registerLoader
+  module: typescript.ModuleKind.ES2022

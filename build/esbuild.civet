@@ -72,3 +72,18 @@ esbuild.build {
       ts: "civet"
   ]
 }
+
+esbuild.build {
+  entryPoints: ["source/ts-loader.civet", "source/ts-loader-hooks.mjs"]
+  tsconfig: "./tsconfig.json"
+  external: ["typescript", "@danielx/hera"]
+  format: "esm"
+  bundle: true
+  platform: 'node'
+  outdir: 'dist/'
+  outExtension: { '.js': '.mjs' }
+  plugins: [
+    civetPlugin
+      ts: "civet"
+  ]
+}

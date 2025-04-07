@@ -1,6 +1,6 @@
 import { fileURLToPath, pathToFileURL } from "url";
-
 import fs from "fs";
+
 import { compile } from "@danielx/hera";
 
 const baseURL = pathToFileURL(process.cwd() + "/").href;

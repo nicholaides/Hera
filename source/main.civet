@@ -9,7 +9,7 @@ import { createRequire } from "module"
 parser from ./hera.hera
 { compile as heraCompile, type CompilerOptions } from ./compiler.civet
 { grammarToEBNF } from ./util.civet
-{ compileTsToJs, typescript } from ./tsc-helper.mjs
+{ compileTsToJs, typescript } from ./tsc-helper.civet
 
 require := createRequire(import.meta.url)
 
