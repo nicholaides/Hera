@@ -1,14 +1,14 @@
-import * as heraEsm from "./esm.mjs"
-import { compileTsToJs } from "./tsc-helper.civet"
+import { resolve, buildLoadFunction } from "./esm.mjs";
+import { compileTsToJs } from "./tsc-helper.civet";
 
-let compilerOptions
+let compilerOptions;
 
-export function initialize(compilerOpts = {}) {
-  compilerOptions = compilerOpts
+function initialize(compilerOpts = {}) {
+  compilerOptions = compilerOpts;
 }
 
-export const resolve = heraEsm.resolve
+const load = buildLoadFunction({
+  postProcess: (source) => compileTsToJs(source, { compilerOptions }),
+});
 
-export const load = heraEsm.buildLoadFunction({
-  postProcess: (source) => compileTsToJs(source, { compilerOptions })
-})
+export { initialize, resolve, load };
