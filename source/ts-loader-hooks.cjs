@@ -1,5 +1,5 @@
-import { resolve, buildLoadFunction } from "./esm.mjs";
-import { compileTsToJs } from "./tsc-helper.civet";
+const { resolve, buildLoadFunction } = require("./esm.cjs");
+const { compileTsToJs } = require("./tsc-helper.cjs");
 
 let compilerOptions;
 
@@ -11,4 +11,4 @@ const load = buildLoadFunction({
   postProcess: (source) => compileTsToJs(source, { compilerOptions }),
 });
 
-export { initialize, resolve, load };
+module.exports = { initialize, resolve, load };

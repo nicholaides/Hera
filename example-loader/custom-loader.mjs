@@ -1,5 +1,5 @@
 // A simple loader that compiles .hera files and also adds an import called passedThroughCustomLoader to the generated module
-import * as heraEsm from "../source/esm.mjs"
+import * as heraEsm from "../source/esm.cjs"
 
 export const resolve = heraEsm.resolve
 

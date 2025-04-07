@@ -1,12 +1,12 @@
-import { fileURLToPath, pathToFileURL } from "url";
-import fs from "fs";
+const { fileURLToPath, pathToFileURL } = require("url");
+const fs = require("fs");
 
-import { compile } from "@danielx/hera";
+const { compile } = require("@danielx/hera");
 
 const baseURL = pathToFileURL(process.cwd() + "/").href;
 const extensionsRegex = /\.hera$/;
 
-export async function resolve(specifier, context, defaultResolve) {
+async function resolve(specifier, context, defaultResolve) {
   const { parentURL = baseURL } = context;
 
   if (extensionsRegex.test(specifier)) {
@@ -20,12 +20,7 @@ export async function resolve(specifier, context, defaultResolve) {
   return defaultResolve(specifier, context, defaultResolve);
 }
 
-export function load(
-  url,
-  context,
-  next,
-  { postProcess = (source) => source } = {}
-) {
+function load(url, context, next, { postProcess = (source) => source } = {}) {
   if (extensionsRegex.test(url)) {
     const filename = fileURLToPath(url);
     const source = compile(fs.readFileSync(filename, "utf8"), {
@@ -49,6 +44,8 @@ export function load(
   return next(url, context);
 }
 
-export function buildLoadFunction(heraLoaderOptions) {
+function buildLoadFunction(heraLoaderOptions) {
   return (url, context, next) => load(url, context, next, heraLoaderOptions);
 }
+
+module.exports = { resolve, load, buildLoadFunction };

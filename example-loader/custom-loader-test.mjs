@@ -1,6 +1,3 @@
-// This module requires the loader in ./loader.mjs to be registered.
-// E.g. via `node --import=./custom-loader.mjs index.mjs`
-//
 // `yarn test:example-register` will test this example
 
 import assert from "node:assert"
