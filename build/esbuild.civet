@@ -60,7 +60,7 @@ esbuild.build({
   ]
 }).catch -> process.exit 1
 
-esbuild.build {
+esbuild.build
   entryPoints: ["source/esbuild-plugin.civet"]
   tsconfig: "./tsconfig.json"
   format: "cjs"
@@ -71,10 +71,9 @@ esbuild.build {
     civetPlugin
       ts: "civet"
   ]
-}
 
-esbuild.build {
-  entryPoints: ["source/ts-loader.civet", "source/ts-loader-hooks.mjs"]
+esbuild.build
+  entryPoints: ["source/ts-loader-hooks.mjs"]
   tsconfig: "./tsconfig.json"
   external: ["typescript", "@danielx/hera"]
   format: "esm"
@@ -86,4 +85,17 @@ esbuild.build {
     civetPlugin
       ts: "civet"
   ]
-}
+
+esbuild.build
+  entryPoints: ["source/ts-loader.civet"]
+  tsconfig: "./tsconfig.json"
+  external: ["typescript", "@danielx/hera"]
+  format: "cjs"
+  bundle: true
+  platform: 'node'
+  outdir: 'dist/'
+  outExtension: { '.js': '.cjs' }
+  plugins: [
+    civetPlugin
+      ts: "civet"
+  ]

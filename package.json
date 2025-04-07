@@ -58,9 +58,8 @@
     "build": "bash build/compile",
     "test": "c8 mocha && yarn test:typed-parser-samples && yarn test:example-loader",
     "test:typed-parser-samples": "build/typed-parser-samples && tsc -p tsconfig.parsers.json",
-    "test:example-loader": "cd example-loader/ && node --import ./custom-loader-register.mjs ./custom-loader-test.mjs",
-    "test:ts-loader-usage": "cd example-loader/ && node --import ./use-ts-loader.mjs ./use-ts-loader-test.mjs"
-
+    "test:example-loader": "cd example-loader/ && node -r ./custom-loader-register.cjs ./custom-loader-test.mjs",
+    "test:ts-loader-usage": "cd example-loader/ && node -r ./use-ts-loader.cjs ./use-ts-loader-test.mjs"
   },
   "bin": {
     "hera": "dist/hera"
@@ -76,7 +75,7 @@
     "./esbuild-plugin": "./dist/esbuild.js",
     "./esbuild": "./dist/esbuild.js",
     "./register": "./register.js",
-    "./ts-loader": "./dist/ts-loader.mjs",
+    "./ts-loader": "./dist/ts-loader.cjs",
     "./ts-loader-hooks": "./dist/ts-loader-hooks.mjs",
     "./esm": "./dist/esm.mjs",
     "./*": "./*",
