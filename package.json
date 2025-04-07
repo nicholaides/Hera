@@ -77,7 +77,6 @@
     "./esbuild": "./dist/esbuild.js",
     "./register": "./register.js",
     "./ts-loader": "./dist/ts-loader.cjs",
-    "./ts-loader-hooks": "./dist/ts-loader-hooks.cjs",
     "./esm": "./dist/esm.cjs",
     "./*": "./*",
     "./dist/*": "./dist/*"
