@@ -66,8 +66,7 @@
     "hera": "dist/hera"
   },
   "files": [
-    "dist/",
-    "register.js"
+    "dist/"
   ],
   "main": "dist/main.js",
   "exports": {
@@ -75,7 +74,7 @@
     "./lib": "./dist/machine.js",
     "./esbuild-plugin": "./dist/esbuild.js",
     "./esbuild": "./dist/esbuild.js",
-    "./register": "./register.js",
+    "./register": "./dist/register.js",
     "./ts-loader": "./dist/ts-loader.cjs",
     "./esm": "./dist/esm.cjs",
     "./*": "./*",
