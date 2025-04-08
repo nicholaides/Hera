@@ -1,4 +1,4 @@
-const { registerLoader, typescript } = require('@danielx/hera/ts-loader')
+const { registerLoader } = require('../../source/ts-loader.cjs')
 
 registerLoader({
   tsc: {
