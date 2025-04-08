@@ -87,7 +87,7 @@ esbuild.build
   ]
 
 esbuild.build
-  entryPoints: ["source/register.civet"]
+  entryPoints: ["source/register.civet", "source/register/tsc.js"]
   tsconfig: "./tsconfig.json"
   format: "cjs"
   bundle: false

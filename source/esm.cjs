@@ -20,21 +20,31 @@ async function resolve(specifier, context, defaultResolve) {
   return defaultResolve(specifier, context, defaultResolve);
 }
 
-function load(url, context, next, { postProcess = (source) => source } = {}) {
+function load(
+  url,
+  context,
+  next,
+  { getOptions = () => {}, postProcess = (source) => source } = {}
+) {
   if (extensionsRegex.test(url)) {
     const filename = fileURLToPath(url);
+
+    const options = getOptions() ?? {};
+    options.hera ??= {};
+    options.hera.module ??= false;
+
     const source = compile(fs.readFileSync(filename, "utf8"), {
       filename,
       inlineMap: true,
-      module: true,
+      ...options.hera,
     });
 
-    const processedSource = postProcess(source, { url, context });
+    const processedSource = postProcess(source, options, { url, context });
 
     // TODO: how to avoid shortCircuit?
     // We may want to pass the module to babel or whatever in the future
     return {
-      format: "module",
+      format: options.hera.module ? "module" : "commonjs",
       source: processedSource,
       shortCircuit: true,
     };

@@ -26,7 +26,7 @@
     ],
     "require": [
       "@danielx/civet/register",
-      "./register-hera-ts.civet"
+      "./source/register/tsc.js"
     ],
     "reporter": "dot",
     "recursive": true,
@@ -60,7 +60,8 @@
     "test:typed-parser-samples": "build/typed-parser-samples && tsc -p tsconfig.parsers.json",
     "test:example-loader": "cd example-loader/ && node -r ./custom-loader-register.cjs ./custom-loader-test.mjs",
     "test:ts-loader-usage": "cd example-loader/ && node -r ./use-ts-loader.cjs ./use-ts-loader-test.mjs",
-    "test:register": "cd example-loader/ && node -r @danielx/hera/register ./use-register.mjs"
+    "test:register": "cd example-loader/ && node -r @danielx/hera/register ./use-register.mjs",
+    "test:register-tsc": "cd example-loader/ && node -r @danielx/hera/register/tsc ./use-ts-loader-test.mjs"
   },
   "bin": {
     "hera": "dist/hera"
@@ -75,6 +76,7 @@
     "./esbuild-plugin": "./dist/esbuild.js",
     "./esbuild": "./dist/esbuild.js",
     "./register": "./dist/register.js",
+    "./register/tsc": "./dist/register/tsc.js",
     "./ts-loader": "./dist/ts-loader.cjs",
     "./esm": "./dist/esm.cjs",
     "./*": "./*",

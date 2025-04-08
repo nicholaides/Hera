@@ -3,8 +3,28 @@ const { pathToFileURL } = require("node:url");
 const typescript = require("typescript");
 
 exports.typescript = typescript;
-exports.registerLoader = function registerLoader(compilerOptions) {
-  return register("./ts-loader-hooks.cjs", pathToFileURL(__filename), {
-    data: compilerOptions,
+exports.registerLoader = function registerLoader({
+  tsc = {},
+  hera = {},
+  load = {},
+} = {}) {
+
+  // make copies so we can modify them
+  tsc = { ...tsc };
+  hera = { ...hera };
+  load = { ...load };
+
+  tsc.target ??= typescript.ScriptTarget.ES2022; // based on @tsconfig/node-lts
+  tsc.module ??= typescript.ModuleKind.CommonJS; // use CommonJS by default because it works with CJS and ESM contexts
+
+  // set the module flag for hera.compile
+  hera.module ??= tsc.module === typescript.ModuleKind.CommonJS ? false : true;
+
+  // set the format returned from the load hook
+  load.format ??= hera.module ? "module" : "commonjs";
+
+  const parentURL = pathToFileURL(__filename);
+  return register("./ts-loader-hooks.cjs", parentURL, {
+    data: { tsc, hera, load },
   });
 };

@@ -4,5 +4,7 @@ import * as heraEsm from "../source/esm.cjs"
 export const resolve = heraEsm.resolve
 
 export const load = heraEsm.buildLoadFunction({
-  postProcess: (source) => source + "; export const passedThroughCustomLoader = true",
-})
+  getOptions: () => ({ hera: { module: true } }),
+  postProcess: (source) =>
+    source + "; export const passedThroughCustomLoader = true",
+});

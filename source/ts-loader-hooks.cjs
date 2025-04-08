@@ -1,14 +1,16 @@
 const { resolve, buildLoadFunction } = require("./esm.cjs");
 const { compileTsToJs } = require("./tsc-helper.cjs");
 
-let compilerOptions;
+let registerOptions;
 
-function initialize(compilerOpts = {}) {
-  compilerOptions = compilerOpts;
+function initialize(data = {}) {
+  registerOptions = data;
 }
 
 const load = buildLoadFunction({
-  postProcess: (source) => compileTsToJs(source, { compilerOptions }),
+  getOptions: () => registerOptions,
+  postProcess: (source) =>
+    compileTsToJs(source, { compilerOptions: registerOptions.tsc }),
 });
 
 module.exports = { initialize, resolve, load };
