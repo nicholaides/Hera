@@ -1,7 +1,7 @@
 // `yarn test:example-register` will test this example
 
 import assert from "node:assert"
-import { parse, passedThroughCustomLoader } from "../samples/math.hera"
+import { parse, passedThroughCustomLoader } from "../../samples/math.hera"
 
 // sanity check-- the parser still works
 assert(parse("2+2") === 4)

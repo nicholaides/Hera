@@ -1,0 +1,7 @@
+```
+import { upcase } from './helper.cts' // custom tsc register settings should convert this to helper.cjs
+```
+
+Rule
+  "a" ->
+    return upcase($1) as string

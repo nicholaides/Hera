@@ -56,12 +56,9 @@
     "prepublishOnly": "yarn build && yarn test",
     "benchmark": "NODE_OPTIONS='--require=./node_modules/@danielx/hera/register' civet ./perf/benchmark.civet",
     "build": "bash build/compile",
-    "test": "c8 mocha && yarn test:typed-parser-samples && yarn test:example-loader",
+    "test": "c8 mocha && yarn test:typed-parser-samples && yarn test:register",
     "test:typed-parser-samples": "build/typed-parser-samples && tsc -p tsconfig.parsers.json",
-    "test:example-loader": "cd example-loader/ && node -r ./custom-loader-register.cjs ./custom-loader-test.mjs",
-    "test:ts-loader-usage": "cd example-loader/ && node -r ./use-ts-loader.cjs ./use-ts-loader-test.mjs",
-    "test:register": "cd example-loader/ && node -r @danielx/hera/register ./use-register.mjs",
-    "test:register-tsc": "cd example-loader/ && node -r @danielx/hera/register/tsc ./use-ts-loader-test.mjs"
+    "test:register": "build/test-register"
   },
   "bin": {
     "hera": "dist/hera"

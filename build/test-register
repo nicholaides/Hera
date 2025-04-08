@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+shopt -s globstar
+set -euox pipefail
+
+cd register-examples/
+
+### @danielx/hera/register for untyped grammars
+node -r @danielx/hera/register ./use-untyped-grammar.mjs
+
+### @danielx/hera/register/tsc for typed grammars
+node -r @danielx/hera/register/tsc ./use-typed-grammar.mjs
+
+### Customizing a TSC loader
+node -r ./custom-tsc/register.cjs ./custom-tsc/use.mjs
+
+### Customizing Hera loader
+node -r ./custom-hera/register.cjs ./custom-hera/use.mjs
