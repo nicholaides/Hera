@@ -24,7 +24,7 @@ function registerLoader({
 
   parentURL := pathToFileURL(__filename)
 
-  register "./tsc-loader-hooks.js", parentURL, data: { tsc, hera, load }
+  register "./hooks.js", parentURL, data: { tsc, hera, load }
 
 export {
   typescript

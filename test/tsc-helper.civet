@@ -1,7 +1,7 @@
 assert from assert
-{ compileTsToJs, typescript } from ../source/tsc-helper.civet
+{ compileTsToJs, typescript } from ../source/register/tsc/helper.civet
 
-describe "tsc-helper", ->
+describe "register/tsc/helper", ->
   describe "compileTsToJs", ->
     function removeSourceMap(sourceCode: string)
       sourceCode.split('//#')[0].trim()
