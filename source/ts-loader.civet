@@ -1,9 +1,8 @@
-const { register } = require("node:module");
-const { pathToFileURL } = require("node:url");
-const typescript = require("typescript");
+{ register } from "node:module";
+{ pathToFileURL } from "node:url";
+typescript from "typescript";
 
-exports.typescript = typescript;
-exports.registerLoader = function registerLoader({
+function registerLoader({
   tsc = {},
   hera = {},
   load = {},
@@ -28,3 +27,8 @@ exports.registerLoader = function registerLoader({
     data: { tsc, hera, load },
   });
 };
+
+export {
+  typescript,
+  registerLoader
+}

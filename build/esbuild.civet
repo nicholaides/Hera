@@ -74,7 +74,7 @@ esbuild.build
 
 esbuild.build
   entryPoints: [
-    "source/ts-loader-hooks.civet",
+    "source/ts-loader-hooks.civet"
     "source/ts-loader.civet"
   ]
   tsconfig: "./tsconfig.json"
@@ -90,10 +90,11 @@ esbuild.build
 
 esbuild.build
   entryPoints: [
-      "source/register.civet",
-      "source/register/tsc.civet"
-      "source/tsc-helper.civet"
-    ]
+    "source/esm.civet"
+    "source/register.civet"
+    "source/register/tsc.civet"
+    "source/tsc-helper.civet"
+  ]
   tsconfig: "./tsconfig.json"
   format: "cjs"
   bundle: false

@@ -1,7 +1,7 @@
-const { fileURLToPath, pathToFileURL } = require("url");
-const fs = require("fs");
+{ fileURLToPath, pathToFileURL } from "node:url"
+fs from "node:fs"
 
-const { compile } = require("@danielx/hera");
+{ compile } from "@danielx/hera"
 
 const baseURL = pathToFileURL(process.cwd() + "/").href;
 const extensionsRegex = /\.hera$/;
@@ -54,8 +54,7 @@ function load(
   return next(url, context);
 }
 
-function buildLoadFunction(heraLoaderOptions) {
-  return (url, context, next) => load(url, context, next, heraLoaderOptions);
-}
+function buildLoadFunction(heraLoaderOptions)
+  (url, context, next) => load(url, context, next, heraLoaderOptions)
 
-module.exports = { resolve, load, buildLoadFunction };
+export { resolve, load, buildLoadFunction };

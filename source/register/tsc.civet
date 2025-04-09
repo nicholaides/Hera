@@ -1,1 +1,3 @@
-require('../ts-loader.js').registerLoader()
+{ registerLoader } from '../ts-loader.js'
+
+registerLoader()

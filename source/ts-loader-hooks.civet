@@ -1,5 +1,5 @@
-const { resolve, buildLoadFunction } = require("./esm.js");
-const { compileTsToJs } = require("./tsc-helper.civet");
+{ resolve, buildLoadFunction } from "./esm.civet";
+{ compileTsToJs } from "./tsc-helper.civet";
 
 let registerOptions;
 
@@ -7,10 +7,9 @@ function initialize(data = {}) {
   registerOptions = data;
 }
 
-const load = buildLoadFunction({
-  getOptions: () => registerOptions,
-  postProcess: (source) =>
-    compileTsToJs(source, { compilerOptions: registerOptions.tsc })
-});
+load := buildLoadFunction({
+  getOptions: => registerOptions
+  postProcess: (source: string) => compileTsToJs(source, { compilerOptions: registerOptions.tsc })
+})
 
-module.exports = { initialize, resolve, load };
+export { initialize, resolve, load };
