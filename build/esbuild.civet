@@ -77,7 +77,7 @@ esbuild.build
     "source/esm.civet"
     "source/register.civet"
     "source/register/tsc.civet"
-    "source/register/tsc/helper.civet"
+    "source/register/tsc/transpile.civet"
     "source/register/tsc/hooks.civet"
     "source/register/tsc/loader.civet"
   ]

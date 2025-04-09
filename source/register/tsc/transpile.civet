@@ -7,7 +7,7 @@ interface CompileToJsOptions
   log?: LogFn
   compilerOptions?: CompilerOptions
 
-function compileTsToJs(
+function transpileTsToJs(
   tsSource: string,
   {
     log = console.error
@@ -40,5 +40,5 @@ function compileTsToJs(
 
 export {
   typescript
-  compileTsToJs
+  transpileTsToJs
 }

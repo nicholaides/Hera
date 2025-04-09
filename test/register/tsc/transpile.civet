@@ -1,26 +1,26 @@
 assert from assert
-{ compileTsToJs, typescript } from ../../../source/register/tsc/helper.civet
+{ transpileTsToJs, typescript } from ../../../source/register/tsc/transpile.civet
 
 describe "register/tsc/helper", ->
-  describe "compileTsToJs", ->
+  describe "transpileTsToJs", ->
     function removeSourceMap(sourceCode: string)
       sourceCode.split('//#')[0].trim()
 
     it "should compile TypeScript code to JavaScript", ->
       ts := "const a = (a: number, b: number) => a + b"
-      js := compileTsToJs(ts) |> removeSourceMap
+      js := transpileTsToJs(ts) |> removeSourceMap
 
       assert.equal js, "var a = function (a, b) { return a + b; };"
 
     it "should accept compiler options", ->
       ts := "const a = (a: number, b: number) => a + b"
-      js := compileTsToJs(ts, compilerOptions: { target: typescript.ScriptTarget.ES2022 }) |> removeSourceMap
+      js := transpileTsToJs(ts, compilerOptions: { target: typescript.ScriptTarget.ES2022 }) |> removeSourceMap
 
       assert.equal js, "const a = (a, b) => a + b;"
 
     it "should not complain about type errors types", ->
       ts := "const a: number = null"
-      js := compileTsToJs(ts) |> removeSourceMap
+      js := transpileTsToJs(ts) |> removeSourceMap
 
       assert.equal js, "var a = null;"
 
@@ -30,6 +30,6 @@ describe "register/tsc/helper", ->
       logged .= ''
 
       assert.throws
-        => compileTsToJs(ts, log: (message: string) => logged = message)
+        => transpileTsToJs(ts, log: (message: string) => logged = message)
         Error
       assert.match logged, /Expression expected/
