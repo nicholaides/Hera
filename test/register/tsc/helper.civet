@@ -1,5 +1,5 @@
 assert from assert
-{ compileTsToJs, typescript } from ../source/register/tsc/helper.civet
+{ compileTsToJs, typescript } from ../../../source/register/tsc/helper.civet
 
 describe "register/tsc/helper", ->
   describe "compileTsToJs", ->
