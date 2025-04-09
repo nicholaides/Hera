@@ -10,7 +10,7 @@ function initialize(data = {}) {
 const load = buildLoadFunction({
   getOptions: () => registerOptions,
   postProcess: (source) =>
-    compileTsToJs(source, { compilerOptions: registerOptions.tsc }),
+    compileTsToJs(source, { compilerOptions: registerOptions.tsc })
 });
 
 module.exports = { initialize, resolve, load };

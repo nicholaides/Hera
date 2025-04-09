@@ -74,7 +74,7 @@ esbuild.build
 
 esbuild.build
   entryPoints: [
-    "source/ts-loader-hooks.js",
+    "source/ts-loader-hooks.civet",
     "source/ts-loader.civet"
   ]
   tsconfig: "./tsconfig.json"
