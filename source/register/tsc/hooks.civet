@@ -1,13 +1,19 @@
-{ resolve, buildLoadFunction } from "../../esm.civet";
-{ compileTsToJs } from "./helper.civet";
+{ resolve, buildLoadFunction } from ../../esm.civet
+{ type HeraLoaderOptions } from ../../esm.civet
 
-let registerOptions
+{ compileTsToJs, type CompilerOptions } from ./helper.civet
 
-function initialize(data = {})
-  registerOptions = data;
+export interface HeraTscRegisterOptions < HeraLoaderOptions
+  tsc?: CompilerOptions
+
+
+let registerOptions: HeraTscRegisterOptions
+
+function initialize(data: HeraTscRegisterOptions = {})
+  registerOptions = data
 
 load := buildLoadFunction
   getOptions: => registerOptions
-  postProcess: (source: string) => compileTsToJs(source, compilerOptions: registerOptions.tsc)
+  postProcess: compileTsToJs(., compilerOptions: registerOptions.tsc)
 
-export {initialize, resolve, load }
+export { initialize, resolve, load }

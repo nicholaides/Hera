@@ -2,16 +2,17 @@
 { pathToFileURL } from node:url
 typescript from typescript
 
+type { HeraTscRegisterOptions } from ./hooks.civet
+
+
 function registerLoader({
   tsc = {}
   hera = {}
-  load = {}
-} = {})
+}: HeraTscRegisterOptions = {})
 
   // make copies so we can modify them
   tsc = { ...tsc }
   hera = { ...hera }
-  load = { ...load }
 
   tsc.target ??= typescript.ScriptTarget.ES2022 // based on @tsconfig/node-lts
   tsc.module ??= typescript.ModuleKind.CommonJS // use CommonJS by default because it works with CJS and ESM contexts
@@ -19,12 +20,9 @@ function registerLoader({
   // set the module flag for hera.compile
   hera.module ??= tsc.module !== typescript.ModuleKind.CommonJS
 
-  // set the format returned from the load hook
-  load.format ??= hera.module ? "module" : "commonjs"
-
   parentURL := pathToFileURL(__filename)
 
-  register "./hooks.js", parentURL, data: { tsc, hera, load }
+  register "./hooks.js", parentURL, data: { tsc, hera }
 
 export {
   typescript

@@ -1,8 +1,18 @@
 typescript from typescript
 
+export CompilerOptions ::= typescript.TranspileOptions['compilerOptions']
+LogFn ::= (...args: any[]) => any
+
+interface CompileToJsOptions
+  log?: LogFn
+  compilerOptions?: CompilerOptions
+
 function compileTsToJs(
   tsSource: string,
-  { log = console.error, compilerOptions = {} } = {}
+  {
+    log = console.error
+    compilerOptions = {}
+  }: CompileToJsOptions = {}
 )
   { outputText, diagnostics } := typescript.transpileModule(tsSource, {
     reportDiagnostics: true
@@ -16,10 +26,11 @@ function compileTsToJs(
     // always log diagnositcs
     if log
       log
-        typescript.formatDiagnosticsWithColorAndContext diagnostics,
-          getCanonicalFileName: (path: string) => path,
-          getCurrentDirectory: typescript.sys.getCurrentDirectory,
-          getNewLine: => typescript.sys.newLine,
+        typescript.formatDiagnosticsWithColorAndContext diagnostics, {
+          getCanonicalFileName: (path) => path
+          getNewLine: => typescript.sys.newLine
+          typescript.sys.getCurrentDirectory
+        }
 
     // throw an exeption if there are errors
     if diagnostics.find(&.category === typescript.DiagnosticCategory.Error)

@@ -74,27 +74,12 @@ esbuild.build
 
 esbuild.build
   entryPoints: [
-    "source/register/tsc/hooks.civet"
-    "source/register/tsc/loader.civet"
-  ]
-  tsconfig: "./tsconfig.json"
-  external: ["typescript", "@danielx/hera"]
-  format: "cjs"
-  bundle: true
-  platform: 'node'
-  outdir: 'dist/'
-  outbase: 'source/'
-  plugins: [
-    civetPlugin
-      ts: "civet"
-  ]
-
-esbuild.build
-  entryPoints: [
     "source/esm.civet"
     "source/register.civet"
     "source/register/tsc.civet"
     "source/register/tsc/helper.civet"
+    "source/register/tsc/hooks.civet"
+    "source/register/tsc/loader.civet"
   ]
   tsconfig: "./tsconfig.json"
   format: "cjs"
@@ -105,4 +90,5 @@ esbuild.build
   plugins: [
     civetPlugin
       ts: "civet"
+      emitDeclaration: true
   ]

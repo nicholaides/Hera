@@ -26,16 +26,16 @@ function sed_i() {
   rm "${@: -1}.bak"
 }
 
+## replace all .civet imports with .js
 # adjust .d.ts files
 for f in dist/**/*.civet.d.ts; do
-  # replace all .civet imports with .js
   sed_i 's/\.civet"/.js"/g' "$f"
-
   mv "$f" "${f%.civet.d.ts}.d.ts"
 done
 
-# hack to rewrite require extension
-sed_i -e 's/main.civet/main.js/' dist/hera
+for f in dist/**/*.js dist/hera; do
+  sed_i 's/\.civet"/.js"/g' "$f"
+done
 
 # hack to remove import_meta and just use existing require
 sed_i -e '/import_meta/d' -e '/import_module/d' -e 's/require2/require/' dist/main.js
