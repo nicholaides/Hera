@@ -91,7 +91,7 @@ esbuild.build
 esbuild.build
   entryPoints: [
       "source/register.civet",
-      "source/register/tsc.js"
+      "source/register/tsc.civet"
       "source/tsc-helper.civet"
     ]
   tsconfig: "./tsconfig.json"
