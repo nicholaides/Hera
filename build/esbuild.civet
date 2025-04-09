@@ -73,7 +73,10 @@ esbuild.build
   ]
 
 esbuild.build
-  entryPoints: ["source/ts-loader-hooks.cjs", "source/ts-loader.cjs"]
+  entryPoints: [
+    "source/ts-loader-hooks.cjs",
+    "source/ts-loader.cjs"
+  ]
   tsconfig: "./tsconfig.json"
   external: ["typescript", "@danielx/hera"]
   format: "cjs"
@@ -87,7 +90,10 @@ esbuild.build
   ]
 
 esbuild.build
-  entryPoints: ["source/register.civet", "source/register/tsc.js"]
+  entryPoints: [
+      "source/register.civet",
+      "source/register/tsc.js"
+    ]
   tsconfig: "./tsconfig.json"
   format: "cjs"
   bundle: false
