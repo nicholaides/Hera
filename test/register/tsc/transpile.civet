@@ -24,7 +24,7 @@ describe "register/tsc/helper", ->
 
       assert.equal js, "var a = null;"
 
-    it "should complain about syntax errors", ->
+    it "should throw and log syntax errors", ->
       ts := "!!!"
 
       logged .= ''
