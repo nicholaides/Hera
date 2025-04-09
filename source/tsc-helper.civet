@@ -3,34 +3,31 @@ typescript from typescript
 function compileTsToJs(
   tsSource: string,
   { log = console.error, compilerOptions = {} } = {}
-) {
-  const { outputText, diagnostics } = typescript.transpileModule(tsSource, {
-    compilerOptions,
-    reportDiagnostics: true,
-  });
+)
+  { outputText, diagnostics } := typescript.transpileModule(tsSource, {
+    reportDiagnostics: true
+    compilerOptions
+  })
 
   // It's possible that when using transpileModule that it will never give
   // warnings, only errors, but I'm not sure, so we'll log all diagnostics and
   // only throw if there are errors.
-  if (diagnostics?.length) {
+  if diagnostics?#
     // always log diagnositcs
-    if (log) {
-      log(
-        typescript.formatDiagnosticsWithColorAndContext(diagnostics, {
+    if log
+      log
+        typescript.formatDiagnosticsWithColorAndContext diagnostics,
           getCanonicalFileName: (path: string) => path,
           getCurrentDirectory: typescript.sys.getCurrentDirectory,
-          getNewLine: () => typescript.sys.newLine,
-        })
-      );
-    }
+          getNewLine: => typescript.sys.newLine,
 
     // throw an exeption if there are errors
-    if (diagnostics.find(($) => $.category === typescript.DiagnosticCategory.Error)) {
-      throw new Error("TypeScript compilation failed");
-    }
-  }
+    if diagnostics.find(&.category === typescript.DiagnosticCategory.Error)
+      throw new Error "TypeScript compilation failed"
 
-  return outputText;
+  outputText
+
+export {
+  typescript
+  compileTsToJs
 }
-
-export { typescript, compileTsToJs }
