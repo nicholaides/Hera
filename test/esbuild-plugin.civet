@@ -1,7 +1,7 @@
 assert from assert
 { writeFileSync, mkdirSync } from node:fs
 esbuild from esbuild
-esbuildPlugin from ../source/esbuild-plugin.civet
+esbuildPlugin from ../source/esbuild.civet
 
 function transform(basename: string, pluginOptions: any, tsSource: string)
 

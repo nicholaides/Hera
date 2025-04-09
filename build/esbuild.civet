@@ -72,20 +72,10 @@ esbuild.build({
   ]
 }).catch -> process.exit 1
 
-esbuild.build
-  entryPoints: ["source/esbuild-plugin.civet"]
-  tsconfig: "./tsconfig.json"
-  format: "cjs"
-  bundle: false
-  platform: 'node'
-  outfile: 'dist/esbuild.js'
-  plugins: [
-    civetPlugin
-      ts: "civet"
-  ]
 
 esbuild.build
   entryPoints: [
+    "source/esbuild.civet"
     "source/esm.civet"
     "source/hera-types.civet"
     "source/register.civet"
