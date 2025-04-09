@@ -1,4 +1,4 @@
-const { registerLoader } = require('../../source/ts-loader.cjs')
+const { registerLoader } = require('../../source/ts-loader.js')
 
 registerLoader({
   tsc: {

@@ -24,7 +24,7 @@ exports.registerLoader = function registerLoader({
   load.format ??= hera.module ? "module" : "commonjs";
 
   const parentURL = pathToFileURL(__filename);
-  return register("./ts-loader-hooks.cjs", parentURL, {
+  return register("./ts-loader-hooks.js", parentURL, {
     data: { tsc, hera, load },
   });
 };

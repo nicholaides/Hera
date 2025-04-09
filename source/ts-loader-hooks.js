@@ -1,5 +1,5 @@
-const { resolve, buildLoadFunction } = require("./esm.cjs");
-const { compileTsToJs } = require("./tsc-helper.cjs");
+const { resolve, buildLoadFunction } = require("./esm.js");
+const { compileTsToJs } = require("./tsc-helper.js");
 
 let registerOptions;
 

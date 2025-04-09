@@ -74,8 +74,8 @@ esbuild.build
 
 esbuild.build
   entryPoints: [
-    "source/ts-loader-hooks.cjs",
-    "source/ts-loader.cjs"
+    "source/ts-loader-hooks.js",
+    "source/ts-loader.js"
   ]
   tsconfig: "./tsconfig.json"
   external: ["typescript", "@danielx/hera"]
@@ -83,7 +83,6 @@ esbuild.build
   bundle: true
   platform: 'node'
   outdir: 'dist/'
-  outExtension: { '.js': '.cjs' }
   plugins: [
     civetPlugin
       ts: "civet"
