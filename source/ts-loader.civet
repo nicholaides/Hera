@@ -1,34 +1,32 @@
-{ register } from "node:module";
-{ pathToFileURL } from "node:url";
-typescript from "typescript";
+{ register } from node:module
+{ pathToFileURL } from node:url
+typescript from typescript
 
 function registerLoader({
-  tsc = {},
-  hera = {},
-  load = {},
-} = {}) {
+  tsc = {}
+  hera = {}
+  load = {}
+} = {})
 
   // make copies so we can modify them
-  tsc = { ...tsc };
-  hera = { ...hera };
-  load = { ...load };
+  tsc = { ...tsc }
+  hera = { ...hera }
+  load = { ...load }
 
-  tsc.target ??= typescript.ScriptTarget.ES2022; // based on @tsconfig/node-lts
-  tsc.module ??= typescript.ModuleKind.CommonJS; // use CommonJS by default because it works with CJS and ESM contexts
+  tsc.target ??= typescript.ScriptTarget.ES2022 // based on @tsconfig/node-lts
+  tsc.module ??= typescript.ModuleKind.CommonJS // use CommonJS by default because it works with CJS and ESM contexts
 
   // set the module flag for hera.compile
-  hera.module ??= tsc.module === typescript.ModuleKind.CommonJS ? false : true;
+  hera.module ??= tsc.module !== typescript.ModuleKind.CommonJS
 
   // set the format returned from the load hook
-  load.format ??= hera.module ? "module" : "commonjs";
+  load.format ??= hera.module ? "module" : "commonjs"
 
-  const parentURL = pathToFileURL(__filename);
-  return register("./ts-loader-hooks.js", parentURL, {
-    data: { tsc, hera, load },
-  });
-};
+  parentURL := pathToFileURL(__filename)
+
+  register "./ts-loader-hooks.js", parentURL, data: { tsc, hera, load }
 
 export {
-  typescript,
+  typescript
   registerLoader
 }

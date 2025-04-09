@@ -1,23 +1,22 @@
-try {
-  const { register } = require('node:module');
-  const { pathToFileURL } = require('node:url');
+try
+  { register } := require('node:module')
+  { pathToFileURL } := require('node:url')
 
-  register('./esm.js', pathToFileURL(__filename));
-} catch (e) {
+  register './esm.js', pathToFileURL(__filename)
+catch
   // older Node lacking module register
-}
 
-if (require.extensions) {
-  try {require("@cspotcode/source-map-support/register-hook-require")} catch (e) {}
-  const fs = require("fs");
-  const { compile } = require("../dist/main.js");
+if require.extensions
+  try
+    require "@cspotcode/source-map-support/register-hook-require"
 
-  require.extensions[".hera"] = function (module, filename) {
-    const js = compile(fs.readFileSync(filename, 'utf8'), {
+  fs := require("fs");
+  { compile } := require("../dist/main.js");
+
+  require.extensions[".hera"] = (module, filename) =>
+    js := compile(fs.readFileSync(filename, 'utf8'), {
       filename,
       inlineMap: true,
-    });
+    })
 
-    return module._compile(js, filename);
-  };
-}
+    module._compile(js, filename)

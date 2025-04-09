@@ -1,15 +1,13 @@
 { resolve, buildLoadFunction } from "./esm.civet";
 { compileTsToJs } from "./tsc-helper.civet";
 
-let registerOptions;
+let registerOptions
 
-function initialize(data = {}) {
+function initialize(data = {})
   registerOptions = data;
-}
 
-load := buildLoadFunction({
+load := buildLoadFunction
   getOptions: => registerOptions
-  postProcess: (source: string) => compileTsToJs(source, { compilerOptions: registerOptions.tsc })
-})
+  postProcess: (source: string) => compileTsToJs(source, compilerOptions: registerOptions.tsc)
 
-export { initialize, resolve, load };
+export {initialize, resolve, load }
