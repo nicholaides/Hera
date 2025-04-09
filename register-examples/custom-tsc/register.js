@@ -1,4 +1,4 @@
-const { registerLoader } = require('../../source/ts-loader.js')
+const { registerLoader } = require('@danielx/hera/ts-loader')
 
 registerLoader({
   tsc: {

@@ -1,10 +1,10 @@
-const ts = require("typescript");
+typescript from typescript
 
 function compileTsToJs(
-  tsSource,
+  tsSource: string,
   { log = console.error, compilerOptions = {} } = {}
 ) {
-  const { outputText, diagnostics } = ts.transpileModule(tsSource, {
+  const { outputText, diagnostics } = typescript.transpileModule(tsSource, {
     compilerOptions,
     reportDiagnostics: true,
   });
@@ -16,16 +16,16 @@ function compileTsToJs(
     // always log diagnositcs
     if (log) {
       log(
-        ts.formatDiagnosticsWithColorAndContext(diagnostics, {
-          getCanonicalFileName: (path) => path,
-          getCurrentDirectory: ts.sys.getCurrentDirectory,
-          getNewLine: () => ts.sys.newLine,
+        typescript.formatDiagnosticsWithColorAndContext(diagnostics, {
+          getCanonicalFileName: (path: string) => path,
+          getCurrentDirectory: typescript.sys.getCurrentDirectory,
+          getNewLine: () => typescript.sys.newLine,
         })
       );
     }
 
     // throw an exeption if there are errors
-    if (diagnostics.find(($) => $.category === ts.DiagnosticCategory.Error)) {
+    if (diagnostics.find(($) => $.category === typescript.DiagnosticCategory.Error)) {
       throw new Error("TypeScript compilation failed");
     }
   }
@@ -33,4 +33,4 @@ function compileTsToJs(
   return outputText;
 }
 
-module.exports = { typescript: ts, compileTsToJs };
+export { typescript, compileTsToJs }
