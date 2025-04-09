@@ -1,4 +1,4 @@
-{ registerLoader, typescript } from ./source/ts-loader.js
+{ registerLoader, typescript } from ./source/tsc-loader.js
 
 registerLoader
   module: typescript.ModuleKind.ES2022

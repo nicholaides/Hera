@@ -74,8 +74,8 @@ esbuild.build
 
 esbuild.build
   entryPoints: [
-    "source/ts-loader-hooks.civet"
-    "source/ts-loader.civet"
+    "source/tsc-loader-hooks.civet"
+    "source/tsc-loader.civet"
   ]
   tsconfig: "./tsconfig.json"
   external: ["typescript", "@danielx/hera"]

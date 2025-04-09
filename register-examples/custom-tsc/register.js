@@ -1,4 +1,4 @@
-const { registerLoader } = require('@danielx/hera/ts-loader')
+const { registerLoader } = require('@danielx/hera/tsc-loader')
 
 registerLoader({
   tsc: {

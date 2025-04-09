@@ -74,7 +74,7 @@
     "./esbuild": "./dist/esbuild.js",
     "./register": "./dist/register.js",
     "./register/tsc": "./dist/register/tsc.js",
-    "./ts-loader": "./dist/ts-loader.js",
+    "./tsc-loader": "./dist/tsc-loader.js",
     "./esm": "./dist/esm.js",
     "./*": "./*",
     "./dist/*": "./dist/*"
