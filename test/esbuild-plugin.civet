@@ -1,0 +1,49 @@
+assert from assert
+{ writeFileSync, mkdirSync } from node:fs
+esbuild from esbuild
+esbuildPlugin from ../source/esbuild-plugin.civet
+
+function transform(basename: string, pluginOptions: any, tsSource: string)
+
+  tsFile := `tmp/${basename}.ts`
+  jsFile := `tmp/${basename}.js`
+
+  mkdirSync 'tmp', recursive: true
+  writeFileSync tsFile, tsSource
+
+  await esbuild.build
+    entryPoints: [tsFile]
+    outfile: jsFile
+    bundle: true
+    format: 'cjs'
+    plugins: [
+      esbuildPlugin(pluginOptions)
+    ]
+
+  import(`../${jsFile}`)
+
+
+describe "esbuild plugin", ->
+  it "should transform untyped grammars", ->
+    { parse } := await transform 'math-example', {}, """
+      import { parse } from '../samples/math.hera'
+      export { parse }
+    """
+
+    assert.equal parse('8 + 3 / 7'), 8 + 3 / 7
+
+
+  it "should transform typed grammars by allowing the loader to be specified", ->
+    writeFileSync 'tmp/typed-grammar.hera', """
+      Rule
+        "a" ->
+          return "ok" as string
+    """
+
+    { parse } := await transform 'typed-grammar', { loader: 'ts' },
+    """
+      import { parse } from './typed-grammar.hera'
+      export { parse }
+    """
+
+    assert.equal parse('a'), "ok"

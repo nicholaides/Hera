@@ -1,26 +1,38 @@
 esbuild from esbuild
 civetPlugin from @danielx/civet/esbuild
-//@ts-expect-error
-heraPlugin from ../node_modules/@danielx/hera/esbuild-plugin.js
+// heraPlugin from ../node_modules/@danielx/hera/esbuild-plugin.js
+
+//------
+// The esbuild plugin from the previous release doesn't work with grammars that generate TypeScript so until the next release, we'll just use this version of the plugin:
+// @ts-expect-error
+{ compile } from ../node_modules/@danielx/hera/dist/main.js
+{ type Plugin } from esbuild
+{ readFile } from node:fs/promises
+{ relative } from node:path
+
+function heraPlugin(heraOptions: any = {}): Plugin
+  name: 'hera'
+  setup: (build) =>
+    build.onLoad { filter: /.\.hera$/ }, ({ path }) =>
+      filename := relative(process.cwd(), path)
+
+      try
+        readFile(path, 'utf8')
+          |> await
+          |> compile ., { ...heraOptions, filename }
+          |> { contents: &, loader: 'ts' }
+
+      catch e
+        text := String(e && e <? 'object' && 'message' in e ? e.message : e)
+        errors: [{ text }]
+//------
+
+
 
 watch := process.argv.includes '--watch'
 minify := process.argv.includes '--minify'
 sourcemap := false
 
-// In order to compile a .hera file that contains typescrypt code, the
-// heraPlugin's onLoad needs to return with loader: 'ts'
-// Since we can't build Hera with the heraPlugin in our source code, we'll wrap
-// output of the previous release's plugin until Hera has another release then we can use that.
-heraPluginThatReturnsTs := (...options) =>
-  orig := heraPlugin(...options)
-  {
-    ...orig
-    setup: (build) =>
-      orig.setup
-        onLoad: (attrs, cb) =>
-          build.onLoad attrs, (...args) =>
-            cb(...args).then { ...&, loader: 'ts'}
-  }
 
 esbuild.build({
   entryPoints: ['source/main.civet']
@@ -35,7 +47,7 @@ esbuild.build({
   platform: 'node'
   outdir: 'dist/'
   plugins: [
-    heraPluginThatReturnsTs
+    heraPlugin
       inlineMap: true
       module: true
     civetPlugin
