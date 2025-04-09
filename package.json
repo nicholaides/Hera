@@ -77,7 +77,7 @@
     "./register/tsc/loader": "./dist/register/tsc/loader.js",
     "./esm": "./dist/esm.js",
     "./*": "./*",
-    "./dist/*": "./dist/*"
-  },
-  "types": "dist/types.d.ts"
+    "./dist/*": "./dist/*",
+    "./hera-types": "./dist/hera-types.js"
+  }
 }

@@ -11,7 +11,7 @@ rm -rf ./parsers
 mkdir -p ./parsers
 
 function compile_parser() {
-  civet source/cli.civet --types --libPath ../source/machine < "$1" > "parsers/$(basename "$1").ts"
+  ./dist/hera --types < "$1" > "parsers/$(basename "$1").ts"
 }
 
 compile_parser samples/code.hera
@@ -25,8 +25,3 @@ compile_parser samples/unary-subtract.hera
 compile_parser samples/types.hera
 
 compile_parser samples/hera_v0_8.hera
-# hera_v0_8.hera depends on hera-types.civet which depends on machine.ts.
-# Since we're compiling these parsers with the source/ version instead of dist/,
-# we need to compile these, too so they are avaible to hera_v0_8.hera.
-civet --compile source/hera-types.civet --output parsers/hera-types.ts
-tsc source/machine.ts --declaration --emitDeclarationOnly --outDir parsers --target es6 --moduleResolution bundler

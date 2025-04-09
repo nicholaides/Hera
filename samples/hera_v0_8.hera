@@ -6,7 +6,7 @@ import {
   type Handler,
   type StructuralTerminal,
   type StructuralObject,
-} from './hera-types'
+} from '@danielx/hera/hera-types'
 ```
 
 Grammar
