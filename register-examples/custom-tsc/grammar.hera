@@ -4,4 +4,4 @@ import { upcase } from './helper.cts' // custom tsc register settings should con
 
 Rule
   "a" ->
-    return upcase($1) as string
+    return upcase("ok") as string
