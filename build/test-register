@@ -7,6 +7,7 @@ cd register-examples/
 
 ### @danielx/hera/register for untyped grammars
 node -r @danielx/hera/register ./use-untyped-grammar.mjs
+node -r @danielx/hera/register ./use-untyped-grammar.cjs
 
 ### @danielx/hera/register/tsc for typed grammars
 node -r @danielx/hera/register/tsc ./use-typed-grammar.mjs
