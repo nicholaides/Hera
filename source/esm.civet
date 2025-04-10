@@ -57,7 +57,7 @@ function load(
       ...options.hera,
     })
 
-    const processedSource = postProcess(source, options, { url, context })
+    processedSource := postProcess(source, options, { url, context })
 
     // TODO: how to avoid shortCircuit?
     // We may want to pass the module to babel or whatever in the future
