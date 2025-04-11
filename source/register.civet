@@ -6,17 +6,7 @@ try
 catch
   // older Node lacking module register
 
-if require.extensions
-  try
-    require "@cspotcode/source-map-support/register-hook-require"
+import { registerHooksAsCjs } from ./register/cjs.civet
+import * as hooks from ./esm.civet
 
-  fs := require("fs");
-  { compile } := require("../dist/main.js");
-
-  require.extensions[".hera"] = (module, filename) =>
-    js := compile(fs.readFileSync(filename, 'utf8'), {
-      filename,
-      inlineMap: true,
-    })
-
-    module._compile(js, filename)
+registerHooksAsCjs(hooks, { data: {}})

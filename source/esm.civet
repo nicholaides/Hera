@@ -1,8 +1,19 @@
 { fileURLToPath, pathToFileURL } from node:url
-fs from node:fs
 
-{ compile } from ./main.civet
+{ transformFile, type HeraRegisterOptions } from ./register/transform.civet
 import type { CompilerOptions } from ./compiler.civet
+
+
+export interface LoadHookResult
+  source: string
+  format: string
+  shortCircuit: boolean
+
+export interface LoadHook
+  (url: string, context: Context, next: LoadHookNext): LoadHookResult
+
+export interface LoadHookNext
+  (url: string, context: Context): LoadHookResult
 
 
 export interface Context
@@ -11,10 +22,6 @@ export interface Context
 export interface HeraLoaderOptions
   hera?: CompilerOptions
 
-export interface HeraRegisterOptions
-  getOptions?: => HeraLoaderOptions
-  postProcess?: PostProcessFn
-
 export PostProcessFn ::= (source: string, options: HeraLoaderOptions, loadContext: { url: string, context: Context }) => string
 
 
@@ -22,56 +29,35 @@ baseURL := pathToFileURL(process.cwd() + "/").href
 extensionsRegex := /\.hera$/
 
 
-function resolve(specifier: string, context: Context, defaultResolve: (specifier: string, context: Context) => ???)
+export function resolve(specifier: string, context: Context, defaultResolve: (specifier: string, context: Context) => ???)
   { parentURL = baseURL } := context
 
-  if extensionsRegex.test(specifier)
-    return {
-      shortCircuit: true
-      url: new URL(specifier, parentURL).href
-    }
+  return defaultResolve(specifier, context) unless extensionsRegex.test(specifier)
 
-  // Let Node.js handle all other specifiers.
-  defaultResolve(specifier, context)
+  {
+    url: new URL(specifier, parentURL).href
+    shortCircuit: true
+  }
 
-
-function load(
+export function loadHera(
   url: string
   context: Context
-  next: (url: string, context: Context) => ???
-  {
-    getOptions = => {}
-    postProcess = &
-  }: HeraRegisterOptions = {}
+  next: LoadHookNext
+  options: HeraRegisterOptions
 )
-  if extensionsRegex.test(url)
-    filename := fileURLToPath(url)
+  return next(url, context) unless extensionsRegex.test(url)
 
-    options := getOptions() ?? {}
-    options.hera ??= {}
-    options.hera.module ??= false
+  filename := fileURLToPath(url)
 
-    source := compile(fs.readFileSync(filename, "utf8"), {
-      filename,
-      inlineMap: true,
-      ...options.hera,
-    })
-
-    processedSource := postProcess(source, options, { url, context })
-
+  {
+    ...transformFile(filename, options)
     // TODO: how to avoid shortCircuit?
     // We may want to pass the module to babel or whatever in the future
-    return {
-      format: options.hera.module ? "module" : "commonjs"
-      source: processedSource
-      shortCircuit: true
-    }
+    shortCircuit: true
+  }
 
-  // Let Node.js handle all other URLs.
-  next(url, context)
+export load: LoadHook := buildLoadFunction({})
 
-function buildLoadFunction(heraLoaderOptions: HeraRegisterOptions)
-  (url: string, context: Context, next: (url: string, context: Context) => ???) =>
-    load(url, context, next, heraLoaderOptions)
-
-export { resolve, load, buildLoadFunction }
+export function buildLoadFunction(heraLoaderOptions: HeraRegisterOptions): LoadHook
+  (url, context, next) =>
+    loadHera(url, context, next, heraLoaderOptions)

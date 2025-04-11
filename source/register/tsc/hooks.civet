@@ -1,5 +1,5 @@
-{ resolve, buildLoadFunction } from ../../esm.civet
-{ type HeraLoaderOptions } from ../../esm.civet
+{ resolve, buildLoadFunction, type LoadHook } from ../../esm.civet
+{ type HeraLoaderOptions } from ../transform.civet
 
 { transpileTsToJs, type CompilerOptions } from ./transpile.civet
 
@@ -12,7 +12,7 @@ let registerOptions: HeraTscRegisterOptions
 function initialize(data: HeraTscRegisterOptions = {})
   registerOptions = data
 
-load := buildLoadFunction
+load: LoadHook := buildLoadFunction
   getOptions: => registerOptions
   postProcess: transpileTsToJs(., compilerOptions: registerOptions.tsc)
 

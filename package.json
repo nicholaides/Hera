@@ -73,6 +73,7 @@
     "./esbuild-plugin": "./dist/esbuild.js",
     "./esbuild": "./dist/esbuild.js",
     "./register": "./dist/register.js",
+    "./register/cjs": "./dist/register/cjs.js",
     "./register/tsc": "./dist/register/tsc.js",
     "./register/tsc/loader": "./dist/register/tsc/loader.js",
     "./esm": "./dist/esm.js",

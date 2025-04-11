@@ -1,0 +1,17 @@
+import type { LoadHook } from ../esm.civet
+
+export function registerHooksAsCjs<Data>(
+  { load, initialize }: { load: LoadHook, initialize?: (data: Data) => any }
+  { data }: { data: Data }
+)
+  if require.extensions
+    try
+      require "@cspotcode/source-map-support/register-hook-require"
+
+    initialize?(data)
+
+    require.extensions[".hera"] = (module, filename) =>
+      { source } := load(`file://${filename}`, {}, module.require)
+
+      // @ts-expect-error
+      module._compile(source, filename)

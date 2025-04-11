@@ -4,6 +4,9 @@ typescript from typescript
 
 type { HeraTscRegisterOptions } from ./hooks.civet
 
+import { registerHooksAsCjs } from ../cjs.civet
+
+* as hooks from ./hooks.civet
 
 function registerLoader({
   tsc = {}
@@ -20,9 +23,8 @@ function registerLoader({
   // set the module flag for hera.compile
   hera.module ??= tsc.module !== typescript.ModuleKind.CommonJS
 
-  parentURL := pathToFileURL(__filename)
-
-  register "./hooks.js", parentURL, data: { tsc, hera }
+  register "./hooks.js", pathToFileURL(__filename), data: { tsc, hera }
+  registerHooksAsCjs hooks, data: { tsc, hera }
 
 export {
   typescript
