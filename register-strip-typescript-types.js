@@ -4,7 +4,7 @@ const { pathToFileURL } = require("node:url");
 register("./ts.mjs", pathToFileURL(__filename));
 
 const { stripTypeScriptTypes } = require("node:module");
-require.extensions[".hera"].middlewares.push((_context, next) => {
-  const { source, ...rest } = next();
-  return { ...rest, source: stripTypeScriptTypes(source) };
+require.extensions[".hera"].middlewares.push((context, next) => {
+  const result = next(context);
+  return { ...result, source: stripTypeScriptTypes(result.source) };
 });

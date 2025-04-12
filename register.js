@@ -8,11 +8,9 @@ try {
 }
 
 if (require.extensions) {
-  try {
-    require("@cspotcode/source-map-support/register-hook-require");
-  } catch (e) {}
+  try { require("@cspotcode/source-map-support/register-hook-require") } catch (e) {}
 
-  function connectMiddlewares(stack, args) {
+  function connectMiddlewares(stack) {
     stack = [...stack];
     const current = stack.pop();
 
@@ -21,31 +19,41 @@ if (require.extensions) {
         throw new Error(`Failed to load ${JSON.stringify(args)}`);
       };
 
-    const next = connectMiddlewares(stack, args);
-    return () => current(args, next);
+    const next = connectMiddlewares(stack);
+    return (args) => current(args, next);
   }
 
-  let middlewares = [];
+
+  const middlewares = [];
 
   require.extensions[".hera"] = function (module, filename) {
-    const { source: js } = connectMiddlewares(middlewares, {
+    const { source: js } = connectMiddlewares(middlewares)({
       filename,
       source: undefined,
-    })();
+    });
     return module._compile(js, filename);
   };
 
-  require.extensions[".hera"].middlewares = middlewares;
-
   const fs = require("fs");
-  require.extensions[".hera"].middlewares.push(({ filename }) => ({
-    source: fs.readFileSync(filename, "utf8"),
-  }));
+  middlewares.push((context) => {
+    return {
+      ...context,
+      source: fs.readFileSync(context.filename, "utf8"),
+    };}
+);
 
   const { compile } = require("./");
-  require.extensions[".hera"].middlewares.push(({ filename }, next) => {
-    const { source, ...rest } = next();
+  middlewares.push((context, next) => {
+    const result = next(context);
 
-    return { ...rest, source: compile(source, { filename, inlineMap: true }) };
+    return {
+      ...result,
+      source: compile(result.source, {
+        filename: result.filename,
+        inlineMap: true,
+      }),
+    };
   });
+
+  require.extensions[".hera"].middlewares = middlewares;
 }
