@@ -1,14 +1,13 @@
-import { stripTypeScriptTypes } from 'module';
+import { stripTypeScriptTypes } from "node:module";
 
-const extensionsRegex = /\.hera$/;
+export const transformLoadHook = (matchUrl, fn) => async (url, context, next) =>
+  next(url, context).then((result) =>
+    matchUrl(url)
+      ? { ...result, source: fn(result.source, context, result) }
+      : result
+  );
 
-export async function load(url, context, next) {
-  if (!extensionsRegex.test(url)) return next(url, context);
-
-  const { source, ...rest } = await next(url, { ...context, format: 'module' });
-
-  return {
-    ...rest,
-    source: stripTypeScriptTypes(source),
-  }
-}
+export const load = transformLoadHook(
+  (url) => /\.hera$/.test(url),
+  stripTypeScriptTypes
+);
