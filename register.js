@@ -16,7 +16,7 @@ if (require.extensions) {
     const middlewares = [];
 
     function handleExtension(module, filename) {
-      const { source: js } = connectMiddlewares(middlewares)({
+      const { source: js } = runMiddlewares(middlewares, {
         filename,
         source: undefined,
       });
@@ -35,16 +35,13 @@ if (require.extensions) {
     return handleExtension;
   }
 
-  function connectMiddlewares(stack) {
+  function runMiddlewares(stack, args) {
     stack = [...stack];
     const current = stack.pop();
 
-    if (!current)
-      return (args) => {
-        throw new Error(`Failed to load ${JSON.stringify(args)}`);
-      };
+    if (!current) throw new Error(`Failed to load ${JSON.stringify(args)}`);
 
-    return (args) => current(args, connectMiddlewares(stack));
+    return current(args, (nextArgs) => runMiddlewares(stack, nextArgs));
   }
 
   const heraCjsStack = requireCjsStack();
