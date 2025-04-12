@@ -12,7 +12,7 @@ if (require.extensions) {
     require("@cspotcode/source-map-support/register-hook-require");
   } catch (e) {}
 
-  function requireCjsStack() {
+  function requireExtensionsChain() {
     const middlewares = [];
 
     function handleExtension(module, filename) {
@@ -44,7 +44,7 @@ if (require.extensions) {
     return current(args, (nextArgs) => runMiddlewares(stack, nextArgs));
   }
 
-  const heraCjsStack = requireCjsStack();
+  const heraCjsStack = requireExtensionsChain();
 
   const fs = require("fs");
   heraCjsStack.middlewares.push((context, _next) => ({
