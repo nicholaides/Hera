@@ -22,7 +22,7 @@ Factor
 
 Integer
   _ /[0-9]+/ ->
-    return Number($2)
+    return Number($2) as number
 
 _
   /\s*/
