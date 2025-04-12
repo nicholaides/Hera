@@ -8,7 +8,9 @@ try {
 }
 
 if (require.extensions) {
-  try { require("@cspotcode/source-map-support/register-hook-require") } catch (e) {}
+  try {
+    require("@cspotcode/source-map-support/register-hook-require");
+  } catch (e) {}
 
   function connectMiddlewares(stack) {
     stack = [...stack];
@@ -23,7 +25,6 @@ if (require.extensions) {
     return (args) => current(args, next);
   }
 
-
   const middlewares = [];
 
   require.extensions[".hera"] = function (module, filename) {
@@ -35,12 +36,12 @@ if (require.extensions) {
   };
 
   const fs = require("fs");
-  middlewares.push((context) => {
+  middlewares.push((context, _next) => {
     return {
       ...context,
       source: fs.readFileSync(context.filename, "utf8"),
-    };}
-);
+    };
+  });
 
   const { compile } = require("./");
   middlewares.push((context, next) => {
