@@ -12,6 +12,29 @@ if (require.extensions) {
     require("@cspotcode/source-map-support/register-hook-require");
   } catch (e) {}
 
+  function requireCjsStack() {
+    const middlewares = [];
+
+    function handleExtension(module, filename) {
+      const { source: js } = connectMiddlewares(middlewares)({
+        filename,
+        source: undefined,
+      });
+      return module._compile(js, filename);
+    }
+
+    handleExtension.middlewares = middlewares;
+
+    handleExtension.pushTransformSource = (fn) => {
+      middlewares.push((context, next) => {
+        const result = next(context);
+        return { ...result, source: fn(result.source, result) };
+      });
+    };
+
+    return handleExtension;
+  }
+
   function connectMiddlewares(stack) {
     stack = [...stack];
     const current = stack.pop();
@@ -21,38 +44,21 @@ if (require.extensions) {
         throw new Error(`Failed to load ${JSON.stringify(args)}`);
       };
 
-    const next = connectMiddlewares(stack);
-    return (args) => current(args, next);
+    return (args) => current(args, connectMiddlewares(stack));
   }
 
-  const middlewares = [];
-
-  require.extensions[".hera"] = function (module, filename) {
-    const { source: js } = connectMiddlewares(middlewares)({
-      filename,
-      source: undefined,
-    });
-    return module._compile(js, filename);
-  };
+  const heraCjsStack = requireCjsStack();
 
   const fs = require("fs");
-  middlewares.push((context, _next) => ({
+  heraCjsStack.middlewares.push((context, _next) => ({
     ...context,
     source: fs.readFileSync(context.filename, "utf8"),
   }));
 
   const { compile } = require("./");
-  middlewares.push((context, next) => {
-    const result = next(context);
+  heraCjsStack.pushTransformSource((source, { filename }) =>
+    compile(source, { filename, inlineMap: true })
+  );
 
-    return {
-      ...result,
-      source: compile(result.source, {
-        filename: result.filename,
-        inlineMap: true,
-      }),
-    };
-  });
-
-  require.extensions[".hera"].middlewares = middlewares;
+  require.extensions[".hera"] = heraCjsStack;
 }
