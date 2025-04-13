@@ -35,6 +35,7 @@ for f in dist/**/*.civet.d.ts; do
   mv "$f" "${f%.civet.d.ts}.d.ts"
 done
 
+# hack to rewrite require extension
 # adjust .js files
 for f in dist/**/*.js dist/hera; do
   # replace all .civet imports with .js
