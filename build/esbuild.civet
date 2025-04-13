@@ -2,12 +2,12 @@ esbuild from esbuild
 civetPlugin from @danielx/civet/esbuild
 
 // Use a previous release's esbuild plugin
+//@ts-expect-error
 heraPlugin from ../node_modules/@danielx/hera/esbuild-plugin.js
 
 watch := process.argv.includes '--watch'
 minify := process.argv.includes '--minify'
 sourcemap := false
-
 
 esbuild.build({
   entryPoints: ['source/main.civet']
@@ -22,9 +22,7 @@ esbuild.build({
   platform: 'node'
   outdir: 'dist/'
   plugins: [
-    heraPlugin
-      inlineMap: true
-      module: true
+    heraPlugin()
     civetPlugin
       ts: "civet"
       emitDeclaration: true
@@ -48,7 +46,7 @@ esbuild.build({
 }).catch -> process.exit 1
 
 
-esbuild.build
+esbuild.build {
   entryPoints: [
     "source/esbuild.civet"
     "source/esm.civet"
@@ -69,3 +67,4 @@ esbuild.build
       ts: "civet"
       emitDeclaration: true
   ]
+}
