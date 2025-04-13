@@ -79,9 +79,9 @@ esbuild.build
     "source/esm.civet"
     "source/hera-types.civet"
     "source/register.civet"
-    "source/register/tsc.civet"
     "source/register/cjs.civet"
-    "source/register/tsc/hooks.civet"
+    "source/register/tsc/index.civet"
+    "source/register/tsc/transpile.civet"
   ]
   tsconfig: "./tsconfig.json"
   format: "cjs"

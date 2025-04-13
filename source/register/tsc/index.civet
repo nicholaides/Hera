@@ -1,12 +1,12 @@
 // set up the basic Hera loaders for ESM and CJS
-import ../register.civet
+import ../../register.civet
 
 // ESM
 { register } from node:module
 { pathToFileURL } from node:url
 // register another loader that transpiles the output of the Hera loader
-register "./tsc/hooks.js", pathToFileURL(__filename)
+register "./transpile.js", pathToFileURL(__filename)
 
 // CJS
-{ pushTranspileStepToCjsLoader } from ./tsc/hooks.civet
+{ pushTranspileStepToCjsLoader } from ./transpile.civet
 pushTranspileStepToCjsLoader()

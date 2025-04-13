@@ -26,7 +26,7 @@
     ],
     "require": [
       "./dist/register.js",
-      "./dist/register/tsc.js",
+      "./dist/register/tsc/index.js",
       "@danielx/civet/register"
     ],
     "reporter": "dot",
@@ -75,8 +75,8 @@
     "./esbuild": "./dist/esbuild.js",
     "./register": "./dist/register.js",
     "./register/cjs": "./dist/register/cjs.js",
-    "./register/tsc": "./dist/register/tsc.js",
-    "./register/tsc/hooks": "./dist/register/tsc/hooks.js",
+    "./register/tsc": "./dist/register/tsc/index.js",
+    "./register/tsc/transpile": "./dist/register/tsc/transpile.js",
     "./esm": "./dist/esm.js",
     "./*": "./*",
     "./dist/*": "./dist/*",

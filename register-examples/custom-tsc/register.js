@@ -8,10 +8,10 @@ const compilerOptions = {
 
 const { register } = require("node:module");
 const { pathToFileURL } = require("node:url");
-register("@danielx/hera/register/tsc/hooks", pathToFileURL(__filename), {
+register("@danielx/hera/register/tsc/transpile", pathToFileURL(__filename), {
   data: compilerOptions,
 });
 
-require("@danielx/hera/register/tsc/hooks").pushTranspileStepToCjsLoader(
+require("@danielx/hera/register/tsc/transpile").pushTranspileStepToCjsLoader(
   compilerOptions
 );

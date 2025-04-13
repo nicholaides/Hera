@@ -1,5 +1,5 @@
 assert from assert
-{ transpileTsToJs } from ../../../source/register/tsc/hooks.civet
+{ transpileTsToJs } from ../../../source/register/tsc/transpile.civet
 typescript from typescript
 
 describe "register/tsc/helper", ->
