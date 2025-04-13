@@ -4,11 +4,7 @@ shopt -s globstar
 
 cd "$(dirname "$0")/.."
 
-# This script uses the current verion of the esbuild plugin, which much be built
-# first via `yarn build`
-
-export NODE_OPTIONS='--require=./node_modules/@danielx/hera/register'
-export PATH="$PWD/node_modules/.bin:$PATH"
+# This script uses the current verion of the hera, built from source via `yarn build`
 
 rm -rf ./parsers
 mkdir -p ./parsers
@@ -26,5 +22,3 @@ compile_parser samples/math.hera
 compile_parser samples/named-params.hera
 compile_parser samples/unary-subtract.hera
 compile_parser samples/types.hera
-
-compile_parser samples/hera_v0_8.hera
