@@ -1,14 +1,15 @@
 assert from assert
-{ writeFileSync, mkdirSync } from node:fs
+{ writeFileSync, mkdirSync, rmSync } from node:fs
+path from node:path
 esbuild from esbuild
 esbuildPlugin from ../source/esbuild.civet
 
-function transform(basename: string, pluginOptions: any, tsSource: string)
+tmpDir := path.join 'tmp', 'esbuild-plugin-testing'
 
-  tsFile := `tmp/${basename}.ts`
-  jsFile := `tmp/${basename}.js`
+function buildWithPlugin(basename: string, pluginOptions: any, tsSource: string)
+  tsFile := path.join tmpDir, `${basename}.ts`
+  jsFile := path.join tmpDir, `${basename}.js`
 
-  mkdirSync 'tmp', recursive: true
   writeFileSync tsFile, tsSource
 
   await esbuild.build
@@ -24,9 +25,12 @@ function transform(basename: string, pluginOptions: any, tsSource: string)
 
 
 describe "esbuild plugin", ->
+  @beforeAll -> mkdirSync tmpDir, recursive: true
+  @afterAll -> rmSync tmpDir, recursive: true
+
   it "should transform untyped grammars", ->
-    { parse } := await transform 'math-example', {}, """
-      import { parse } from '../samples/math.hera'
+    { parse } := await buildWithPlugin 'math-example', {}, """
+      import { parse } from '../../samples/math.hera' // relative to the generated parser file
       export { parse }
     """
 
@@ -40,9 +44,9 @@ describe "esbuild plugin", ->
           return "ok" as string
     """
 
-    { parse } := await transform 'typed-grammar', { loader: 'ts' },
+    { parse } := await buildWithPlugin 'typed-grammar', { loader: 'ts' },
     """
-      import { parse } from './typed-grammar.hera'
+      import { parse } from '../typed-grammar.hera' // relative to the generated parser file
       export { parse }
     """
 
