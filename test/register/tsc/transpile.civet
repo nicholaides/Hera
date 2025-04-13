@@ -19,7 +19,7 @@ describe "register/tsc/helper", ->
 
       assert.equal js, "const a = (a, b) => a + b;"
 
-    it "should not complain about type errors types", ->
+    it "should not complain about type errors", ->
       ts := "const a: number = null"
       js := transpileTsToJs(ts) |> removeSourceMap
 
