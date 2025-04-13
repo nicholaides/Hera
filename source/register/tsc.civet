@@ -1,8 +1,14 @@
+// set up the basic Hera loaders for ESM and CJS
+import ../register.civet
+
+// ESM
 { register } from node:module
 { pathToFileURL } from node:url
-
+// register another loader that transpiles the output of the Hera loader
 register "./tsc/hooks.js", pathToFileURL(__filename)
 
-if heraChain: any := require.extensions?['.hera']
+// CJS
+if heraChain: any := require.extensions?['.hera'] // only run if require.extensions exists
   { transpileTsToJs } := require('./tsc/hooks.civet')
+  // add a transform step to the Hera CJS loader
   heraChain.pushTransformSource transpileTsToJs

@@ -1,0 +1,50 @@
+type { Module } from node:module
+type { CompilerOptions as HeraCompilerOptions } from ../compiler.civet
+
+if require.extensions
+  try
+    require "@cspotcode/source-map-support/register-hook-require"
+
+  type Context = any
+  type Middleware = (context: Context, next: (context: Context) => Context) => Context
+
+  function requireExtensionsChain()
+    middlewares: Middleware[] := []
+    heraOptions: HeraCompilerOptions := {}
+
+    function pushTransformSource(fn: (source: string, context: Context) => string)
+        middlewares.push (context, next) =>
+          result := next(context)
+          return { ...result, source: fn(result.source, result) }
+
+    function handleExtension(module: Module, filename: string)
+      mod := module as Module & { _compile: (source: string, filename: string) =>  }
+      runMiddlewares(middlewares, { filename, source: undefined })
+        |> .source
+        |> mod._compile(., filename)
+
+    Object.assign handleExtension, {
+      middlewares
+      heraOptions
+      pushTransformSource
+    }
+
+  function runMiddlewares([...stack, current]: Middleware[], context: Context)
+    if !current then throw new Error `Failed to load ${JSON.stringify(context)}`
+
+    current(context, (nextContext: Context) => runMiddlewares(stack, nextContext))
+
+  heraCjsStack := requireExtensionsChain()
+
+  fs := require("fs")
+  heraCjsStack.middlewares.push (context) =>
+    {
+      ...context
+      source: fs.readFileSync(context.filename, "utf8")
+    }
+
+  { compile: heraCompile } := require("../main.civet")
+  heraCjsStack.pushTransformSource (source, { filename }) =>
+    heraCompile(source, { filename, inlineMap: true, ...heraCjsStack.heraOptions })
+
+  require.extensions[".hera"] = heraCjsStack

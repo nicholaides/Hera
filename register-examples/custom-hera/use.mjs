@@ -7,6 +7,7 @@ try {
   parser.parse("uh oh")
 } catch (e) {
   assert.equal(e, "USING CUSTOM LIB")
+  console.log('ok')
   process.exit(0)
 }
 

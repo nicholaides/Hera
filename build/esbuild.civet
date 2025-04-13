@@ -80,6 +80,7 @@ esbuild.build
     "source/hera-types.civet"
     "source/register.civet"
     "source/register/tsc.civet"
+    "source/register/cjs.civet"
     "source/register/tsc/hooks.civet"
   ]
   tsconfig: "./tsconfig.json"

@@ -1,3 +1,5 @@
+require('@danielx/hera/register')
+
 const compilerOptions = {
   rewriteRelativeImportExtensions: true,
 };
