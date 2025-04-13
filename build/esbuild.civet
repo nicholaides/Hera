@@ -3,7 +3,9 @@ civetPlugin from @danielx/civet/esbuild
 // heraPlugin from ../node_modules/@danielx/hera/esbuild-plugin.js
 
 //------
-// The esbuild plugin from the previous release doesn't work with grammars that generate TypeScript so until the next release, we'll just use this version of the plugin:
+// The esbuild plugin from the previous release doesn't work with grammars that
+// generate TypeScript so until the next release, we'll just use this cu version
+// of the plugin:
 // @ts-expect-error
 { compile } from ../node_modules/@danielx/hera/dist/main.js
 { type Plugin } from esbuild
