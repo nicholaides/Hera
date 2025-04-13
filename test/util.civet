@@ -5,8 +5,7 @@ assert from assert
 rules := JSON.parse readFile "source/rules.json"
 
 describe "util", ->
-  // TODO: Get this passing again?
-  it.skip "should parse decompiled rules", ->
+  it "should parse decompiled rules", ->
     grammar .= decompile(rules)
 
     // console.log grammar

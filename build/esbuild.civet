@@ -1,35 +1,8 @@
 esbuild from esbuild
 civetPlugin from @danielx/civet/esbuild
-// heraPlugin from ../node_modules/@danielx/hera/esbuild-plugin.js
 
-//------
-// The esbuild plugin from the previous release doesn't work with grammars that
-// generate TypeScript so until the next release, we'll just use this cu version
-// of the plugin:
-// @ts-expect-error
-{ compile } from ../node_modules/@danielx/hera/dist/main.js
-{ type Plugin } from esbuild
-{ readFile } from node:fs/promises
-{ relative } from node:path
-
-function heraPlugin(heraOptions: any = {}): Plugin
-  name: 'hera'
-  setup: (build) =>
-    build.onLoad { filter: /.\.hera$/ }, ({ path }) =>
-      filename := relative(process.cwd(), path)
-
-      try
-        readFile(path, 'utf8')
-          |> await
-          |> compile ., { ...heraOptions, filename }
-          |> { contents: &, loader: 'ts' }
-
-      catch e
-        text := String(e && e <? 'object' && 'message' in e ? e.message : e)
-        errors: [{ text }]
-//------
-
-
+// Use a previous release's esbuild plugin
+heraPlugin from ../node_modules/@danielx/hera/esbuild-plugin.js
 
 watch := process.argv.includes '--watch'
 minify := process.argv.includes '--minify'
