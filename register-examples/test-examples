@@ -1,26 +1,46 @@
 #!/usr/bin/env bash
-set -euox pipefail
+set -euo pipefail
 shopt -s globstar
 
 cd "$(dirname "$0")"
 
-# For JS grammars
-node -r @danielx/hera/register ./hera-standard/use.mjs
-node -r @danielx/hera/register ./hera-standard/use.cjs
+# Each of these examples are duplicated to test that the loaders work in both
+# CJS and ESM contexts
+#
+# Each example proves that it works correcly by outputing "ok" to stdout
 
-# For TS grammars
-node -r @danielx/hera/register/tsc ./tsc-standard/use.mjs
-node -r @danielx/hera/register/tsc ./tsc-standard/use.cjs
+# Verifies that the example outputs "ok" to stdout.
+# This is necessary because if an example is not set up correctly, it can fail
+# to run the example properly but still exit with 0 status code.
+function test_example() {
+  echo "$@"
+  result=$("$@")
+  if [ "$result" != "ok" ]; then
+    echo "Expected 'ok' but got':"
+    echo "$result"
+    exit 1
+  fi
+}
 
-# For JS grammars with custom Hera options
-node -r ./custom-hera/register.js ./custom-hera/use.mjs
-node -r ./custom-hera/register.js ./custom-hera/use.cjs
+# Normal grammars that use only JavaScript code
+test_example node -r @danielx/hera/register ./hera-standard/use.mjs
+test_example node -r @danielx/hera/register ./hera-standard/use.cjs
 
-# For TS grammars with custom compiler options
-node -r ./custom-tsc/register.js ./custom-tsc/use.mjs
-node -r ./custom-tsc/register.js ./custom-tsc/use.cjs
+# Grammars that use TypeScript code; transpiled to JavaScript via the typescript npm module
+# These require the typescript module to be installed
+test_example node -r @danielx/hera/register/tsc ./tsc-standard/use.mjs
+test_example node -r @danielx/hera/register/tsc ./tsc-standard/use.cjs
 
-# For custom transforms after Hera compile
-node -r ./custom-transform/register.js ./custom-transform/use.mjs
-node -r ./custom-transform/register.js ./custom-transform/use.cjs
+# JS-only grammars compiled with custom Hera options
+test_example node -r ./custom-hera/register.js ./custom-hera/use.mjs
+test_example node -r ./custom-hera/register.js ./custom-hera/use.cjs
+
+# TS grammars, transpiled to JS, using custom tsc compiler options
+# These require the typescript module to be installed
+test_example node -r ./custom-tsc/register.js ./custom-tsc/use.mjs
+test_example node -r ./custom-tsc/register.js ./custom-tsc/use.cjs
+
+# Arbitrary transormations after being compiled by Hera
+test_example node -r ./custom-transform/register.js ./custom-transform/use.mjs
+test_example node -r ./custom-transform/register.js ./custom-transform/use.cjs
 

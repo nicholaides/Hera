@@ -1,5 +1,5 @@
 ```
-// custom tsc loader settings should convert this to helper.cjs
+// This import will only succeed if the custom tsc compiler options are applied
 import { helperValue }  from './helper.cts'
 ```
 

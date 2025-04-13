@@ -1,10 +1,8 @@
-// `yarn test:example-register` will test this example
-
 const assert = require("node:assert")
 const parser = require("./grammar.hera")
 
 try {
-  parser.parse("uh oh")
+  parser.parse("a")
 } catch (e) {
   assert.equal(e, "USING CUSTOM LIB")
   console.log('ok')

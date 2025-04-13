@@ -1,5 +1,7 @@
 require("@danielx/hera/register");
 
+// Custom tsc compiler options.
+// The test: importing ./helper.cts will only succeed if these compiler options are applied
 const compilerOptions = {
   rewriteRelativeImportExtensions: true,
 };

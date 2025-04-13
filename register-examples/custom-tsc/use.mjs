@@ -1,5 +1,5 @@
 import assert from "node:assert"
 import { parse } from "./grammar.hera"
 
-assert.equal(parse("a"), "ok")
+assert.equal(parse("a"), "HELPER IS IMPORTED")
 console.log("ok")

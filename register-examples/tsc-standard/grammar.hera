@@ -1,4 +1,5 @@
 Rule
   "a" ->
-    // TSC loader should transpile away the "as string"
+    // importing/requiring this grammar will only succeed if the `as string` is
+    // stripped or traspiled away
     return "ok" as string

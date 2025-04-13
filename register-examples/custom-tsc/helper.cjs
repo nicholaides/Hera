@@ -1,1 +1,1 @@
-exports.helperValue = "ok";
+exports.helperValue = "HELPER IS IMPORTED";
