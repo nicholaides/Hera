@@ -22,7 +22,7 @@ function test_example() {
   fi
 }
 
-# Normal grammars that use only JavaScript code
+# Normal grammar that use only JavaScript code
 test_example node -r @danielx/hera/register ./hera-standard/use.mjs
 test_example node -r @danielx/hera/register ./hera-standard/use.cjs
 
@@ -31,11 +31,11 @@ test_example node -r @danielx/hera/register ./hera-standard/use.cjs
 test_example node -r @danielx/hera/register/tsc ./tsc-standard/use.mjs
 test_example node -r @danielx/hera/register/tsc ./tsc-standard/use.cjs
 
-# JS-only grammars compiled with custom Hera options
+# JS-only grammar compiled with custom Hera options
 test_example node -r ./custom-hera/register.js ./custom-hera/use.mjs
 test_example node -r ./custom-hera/register.js ./custom-hera/use.cjs
 
-# TS grammars, transpiled to JS, using custom tsc compiler options
+# TS grammar, transpiled to JS, using custom tsc compiler options
 # These require the typescript module to be installed
 test_example node -r ./custom-tsc/register.js ./custom-tsc/use.mjs
 test_example node -r ./custom-tsc/register.js ./custom-tsc/use.cjs
