@@ -45,7 +45,6 @@ esbuild.build({
   ]
 }).catch -> process.exit 1
 
-
 esbuild.build {
   entryPoints: [
     "source/esbuild.civet"
