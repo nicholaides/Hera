@@ -1,6 +1,5 @@
 const heraOptions = {
-  // relative to the hera file
-  libPath: "../register-examples/custom-hera/customLib.cjs",
+  libPath: "./XXXX.js",
 };
 
 const { register } = require("node:module");

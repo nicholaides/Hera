@@ -9,7 +9,8 @@ import { createRequire } from "module"
 parser from ./hera.hera
 { compile as heraCompile, type CompilerOptions } from ./compiler.civet
 { grammarToEBNF } from ./util.civet
-{ transpileTsToJs, typescript } from ./register/tsc/transpile.civet
+{ transpileTsToJs } from ./register/tsc/hooks.civet
+typescript  from typescript
 
 require := createRequire(import.meta.url)
 
@@ -17,7 +18,7 @@ ExecModOptions ::= { tsToJs?: boolean }
 
 execMod := (src: string, { tsToJs }: ExecModOptions = {}) => {
   if tsToJs
-    src = transpileTsToJs(src, compilerOptions: { module: typescript.ModuleKind.CommonJS })
+    src = transpileTsToJs(src, module: typescript.ModuleKind.CommonJS)
 
   m := { exports: {} }
   Function("require", "module", "exports", src)(require, m, m.exports)

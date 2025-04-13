@@ -25,6 +25,7 @@
       "civet"
     ],
     "require": [
+      "./dist/register.js",
       "./dist/register/tsc.js",
       "@danielx/civet/register"
     ],
@@ -75,7 +76,7 @@
     "./register": "./dist/register.js",
     "./register/cjs": "./dist/register/cjs.js",
     "./register/tsc": "./dist/register/tsc.js",
-    "./register/tsc/loader": "./dist/register/tsc/loader.js",
+    "./register/tsc/hooks": "./dist/register/tsc/hooks.js",
     "./esm": "./dist/esm.js",
     "./*": "./*",
     "./dist/*": "./dist/*",

@@ -1,5 +1,6 @@
 assert from assert
-{ transpileTsToJs, typescript } from ../../../source/register/tsc/transpile.civet
+{ transpileTsToJs } from ../../../source/register/tsc/hooks.civet
+typescript from typescript
 
 describe "register/tsc/helper", ->
   describe "transpileTsToJs", ->
@@ -10,11 +11,11 @@ describe "register/tsc/helper", ->
       ts := "const a = (a: number, b: number) => a + b"
       js := transpileTsToJs(ts) |> removeSourceMap
 
-      assert.equal js, "var a = function (a, b) { return a + b; };"
+      assert.equal js, "const a = (a, b) => a + b;"
 
     it "should accept compiler options", ->
       ts := "const a = (a: number, b: number) => a + b"
-      js := transpileTsToJs(ts, compilerOptions: { target: typescript.ScriptTarget.ES2022 }) |> removeSourceMap
+      js := transpileTsToJs(ts, target: typescript.ScriptTarget.ES2022) |> removeSourceMap
 
       assert.equal js, "const a = (a, b) => a + b;"
 
@@ -22,7 +23,7 @@ describe "register/tsc/helper", ->
       ts := "const a: number = null"
       js := transpileTsToJs(ts) |> removeSourceMap
 
-      assert.equal js, "var a = null;"
+      assert.equal js, "const a = null;"
 
     it "should throw and log syntax errors", ->
       ts := "!!!"
@@ -30,6 +31,6 @@ describe "register/tsc/helper", ->
       logged .= ''
 
       assert.throws
-        => transpileTsToJs(ts, log: (message: string) => logged = message)
+        => transpileTsToJs(ts, {}, (message: string) => logged = message)
         Error
       assert.match logged, /Expression expected/

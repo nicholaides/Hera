@@ -1,8 +1,9 @@
 { fileURLToPath, pathToFileURL } from node:url
+fs from node:fs
+{ compile } from ./main.civet
 
-{ transformFile, type HeraRegisterOptions } from ./register/transform.civet
+
 import type { CompilerOptions } from ./compiler.civet
-
 
 export interface LoadHookResult
   source: string
@@ -12,8 +13,14 @@ export interface LoadHookResult
 export interface LoadHook
   (url: string, context: Context, next: LoadHookNext): LoadHookResult
 
+export interface AsyncLoadHook
+  (url: string, context: Context, next: AsyncLoadHookNext): Promise<LoadHookResult>
+
 export interface LoadHookNext
   (url: string, context: Context): LoadHookResult
+
+export interface AsyncLoadHookNext
+  (url: string, context: Context): Promise<LoadHookResult>
 
 
 export interface Context
@@ -29,35 +36,47 @@ baseURL := pathToFileURL(process.cwd() + "/").href
 extensionsRegex := /\.hera$/
 
 
-export function resolve(specifier: string, context: Context, defaultResolve: (specifier: string, context: Context) => ???)
-  { parentURL = baseURL } := context
+let heraOptions: CompilerOptions
+export function initialize(data: CompilerOptions = {})
+  heraOptions = data
 
+
+export function resolve(specifier: string, context: Context, defaultResolve: (specifier: string, context: Context) => ???)
   return defaultResolve(specifier, context) unless extensionsRegex.test(specifier)
+
+  { parentURL = baseURL } := context
 
   {
     url: new URL(specifier, parentURL).href
     shortCircuit: true
   }
 
-export function loadHera(
-  url: string
-  context: Context
-  next: LoadHookNext
-  options: HeraRegisterOptions
-)
+export function load(url: string, context: Context, next: LoadHookNext)
   return next(url, context) unless extensionsRegex.test(url)
 
   filename := fileURLToPath(url)
 
+  source :=
+    filename
+      |> fs.readFileSync(., "utf8")
+      |> compile(., { filename, inlineMap: true, ...heraOptions })
+
   {
-    ...transformFile(filename, options)
+    source,
+    format: "commonjs", // options.hera.module ? "module" : "commonjs"
     // TODO: how to avoid shortCircuit?
     // We may want to pass the module to babel or whatever in the future
     shortCircuit: true
   }
 
-export load: LoadHook := buildLoadFunction({})
+export function transformLoadHook(
+  matchUrl: (url: string) => boolean
+  fn: (source: string, context: Context, result: LoadHookResult) => string|Promise<string>
+): AsyncLoadHook
+  async (url, context, next) =>
+    result := await next(url, context)
 
-export function buildLoadFunction(heraLoaderOptions: HeraRegisterOptions): LoadHook
-  (url, context, next) =>
-    loadHera(url, context, next, heraLoaderOptions)
+    if matchUrl(url)
+      { ...result, source: await fn(result.source, context, result) }
+    else
+      result

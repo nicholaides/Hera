@@ -5,18 +5,22 @@ set -euox pipefail
 
 cd register-examples/
 
-### @danielx/hera/register for untyped grammars
+# For JS grammars
 node -r @danielx/hera/register ./use-untyped-grammar.mjs
 node -r @danielx/hera/register ./use-untyped-grammar.cjs
 
-### @danielx/hera/register/tsc for typed grammars
-node -r @danielx/hera/register/tsc ./use-typed-grammar.mjs
-node -r @danielx/hera/register/tsc ./use-typed-grammar.cjs
+# For TS grammars
+node -r @danielx/hera/register -r @danielx/hera/register/tsc ./use-typed-grammar.mjs
+node -r @danielx/hera/register -r @danielx/hera/register/tsc ./use-typed-grammar.cjs
 
-### Customizing a TSC loader
-node -r ./custom-tsc/register.js ./custom-tsc/use.mjs
-node -r ./custom-tsc/register.js ./custom-tsc/use.cjs
+# TS grammars with custom compiler options
+node -r @danielx/hera/register -r ./custom-tsc/register.js ./custom-tsc/use.mjs
+node -r @danielx/hera/register -r ./custom-tsc/register.js ./custom-tsc/use.cjs
 
-### Customizing Hera loader
-node -r ./custom-hera/register.js ./custom-hera/use.mjs
-node -r ./custom-hera/register.js ./custom-hera/use.cjs
+# Custom transform after Hera compile
+node -r @danielx/hera/register -r ./custom-transform/register.js ./custom-transform/use.mjs
+node -r @danielx/hera/register -r ./custom-transform/register.js ./custom-transform/use.cjs
+
+# Custom Hera options
+node -r @danielx/hera/register -r ./custom-hera/register.js ./custom-hera/use.mjs
+node -r @danielx/hera/register -r ./custom-hera/register.js ./custom-hera/use.cjs

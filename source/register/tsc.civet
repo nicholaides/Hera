@@ -1,3 +1,8 @@
-{ registerLoader } from ./tsc/loader.civet
+{ register } from node:module
+{ pathToFileURL } from node:url
 
-registerLoader()
+register "./tsc/hooks.js", pathToFileURL(__filename)
+
+if heraChain: any := require.extensions?['.hera']
+  { transpileTsToJs } := require('./tsc/hooks.civet')
+  heraChain.pushTransformSource transpileTsToJs

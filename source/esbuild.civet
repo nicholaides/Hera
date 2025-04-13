@@ -1,7 +1,7 @@
 { readFile } from node:fs/promises
 { relative } from node:path
 { compile } from ./main.civet
-{ type CompilerOptions } from "./compiler.civet"
+{ type CompilerOptions } from ./compiler.civet
 { type Plugin } from esbuild
 
 interface HeraPluginOptions < CompilerOptions
