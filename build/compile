@@ -26,15 +26,18 @@ function sed_i() {
   rm "${@: -1}.bak"
 }
 
-# hack to rewrite require extension
 # adjust .d.ts files
 for f in dist/**/*.civet.d.ts; do
+  # replace all .civet imports with .js
   sed_i 's/\.civet"/.js"/g' "$f"
+
+  # rename all .civet.d.ts files to .d.ts
   mv "$f" "${f%.civet.d.ts}.d.ts"
 done
 
 # adjust .js files
 for f in dist/**/*.js dist/hera; do
+  # replace all .civet imports with .js
   sed_i 's/\.civet"/.js"/g' "$f"
 done
 
