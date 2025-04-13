@@ -59,7 +59,7 @@
     "build": "bash build/compile",
     "test": "c8 mocha && yarn test:typed-parser-samples && yarn test:register",
     "test:typed-parser-samples": "build/typed-parser-samples && tsc -p tsconfig.parsers.json",
-    "test:register": "build/test-register"
+    "test:register": "register-examples/test-examples"
   },
   "bin": {
     "hera": "dist/hera"

@@ -1,17 +1,16 @@
 #!/usr/bin/env bash
-
-shopt -s globstar
 set -euox pipefail
+shopt -s globstar
 
-cd register-examples/
+cd "$(dirname "$0")"
 
 # For JS grammars
-node -r @danielx/hera/register ./use-untyped-grammar.mjs
-node -r @danielx/hera/register ./use-untyped-grammar.cjs
+node -r @danielx/hera/register ./hera-standard/use.mjs
+node -r @danielx/hera/register ./hera-standard/use.cjs
 
 # For TS grammars
-node -r @danielx/hera/register/tsc ./use-typed-grammar.mjs
-node -r @danielx/hera/register/tsc ./use-typed-grammar.cjs
+node -r @danielx/hera/register/tsc ./tsc-standard/use.mjs
+node -r @danielx/hera/register/tsc ./tsc-standard/use.cjs
 
 # For JS grammars with custom Hera options
 node -r ./custom-hera/register.js ./custom-hera/use.mjs

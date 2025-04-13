@@ -1,7 +1,9 @@
 ```
-import { upcase } from './helper.cts' // custom tsc register settings should convert this to helper.cjs
+// custom tsc loader settings should convert this to helper.cjs
+import { helperValue }  from './helper.cts'
 ```
 
 Rule
   "a" ->
-    return upcase("ok") as string
+    // tsc loader should transpile away the "as string"
+    return helperValue as string

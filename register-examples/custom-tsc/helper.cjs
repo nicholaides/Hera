@@ -1,3 +1,1 @@
-exports.upcase = function (str) {
-  return str.toUpperCase();
-};
+exports.helperValue = "ok";

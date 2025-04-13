@@ -1,0 +1,4 @@
+Rule
+  "a" ->
+    // TSC loader should transpile away the "as string"
+    return "ok" as string

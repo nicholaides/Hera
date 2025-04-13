@@ -1,10 +1,8 @@
-// `yarn test:example-register` will test this example
-
 const assert = require("node:assert")
-const { parse, passedThroughCustomLoader } = require("../../samples/math.hera")
+const { parse, passedThroughCustomLoader } = require("./grammar.hera")
 
 // sanity check-- the parser still works
-assert(parse("2+2") === 4)
+assert.equal(parse("a"), "ok")
 
 // the custom loader should have added an export to math.hera's module
 assert(passedThroughCustomLoader)

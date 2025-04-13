@@ -1,7 +1,7 @@
 // `yarn test:example-register` will test this example
 
 import assert from "node:assert"
-import parser from "../../samples/math.hera"
+import parser from "./grammar.hera"
 
 try {
   parser.parse("uh oh")
