@@ -43,4 +43,3 @@ test_example node -r ./custom-tsc/register.js ./custom-tsc/use.cjs
 # Arbitrary transormations after being compiled by Hera
 test_example node -r ./custom-transform/register.js ./custom-transform/use.mjs
 test_example node -r ./custom-transform/register.js ./custom-transform/use.cjs
-
