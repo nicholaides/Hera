@@ -75,6 +75,7 @@
     "./esbuild": "./dist/esbuild.js",
     "./register": "./dist/register.js",
     "./register/cjs": "./dist/register/cjs.js",
+    "./register/esm": "./dist/esm.js",
     "./register/tsc": "./dist/register/tsc/index.js",
     "./register/tsc/esm": "./dist/register/tsc/esm.js",
     "./register/tsc/cjs": "./dist/register/tsc/cjs.js",

@@ -1,7 +1,6 @@
+{ pushTransformSource } from ../cjs.civet
 { type CompilerOptions, transpileTsToJs } from ./transpile.civet
 
-// Register this module as a CJS loader
-export function pushTranspileStepToCjsLoader(compilerOptions: CompilerOptions = {})
-  if heraChain: any := require.extensions?['.hera'] // only run if require.extensions exists
-    // add a transform step to the Hera CJS loader
-    heraChain.pushTransformSource (source: string) => transpileTsToJs(source, compilerOptions)
+// Add the transpile step to the CJS loader
+export function initialize(compilerOptions: CompilerOptions = {})
+  pushTransformSource (source: string) => transpileTsToJs(source, compilerOptions)

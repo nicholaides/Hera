@@ -1,7 +1,8 @@
 { type CompilerOptions, transpileTsToJs } from ./transpile.civet
 
-// This can module can be registered as an EMS loader
+// module-level state that is set via the initialize function
 let compilerOptions: CompilerOptions
+
 export function initialize(data: CompilerOptions = {})
   compilerOptions = data
 

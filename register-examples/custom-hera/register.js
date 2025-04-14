@@ -8,8 +8,7 @@ const heraOptions = {
 const { register } = require("node:module");
 const { pathToFileURL } = require("node:url");
 // register the Hera ESM loader with custom Hera compiler options
-register("@danielx/hera/esm", pathToFileURL(__filename), { data: heraOptions });
+register("@danielx/hera/register/esm", pathToFileURL(__filename), { data: heraOptions });
 
 // CJS
-require("@danielx/hera/register/cjs"); // set up the basic Hera CJS loader
-require.extensions[".hera"].heraOptions = heraOptions; // set the custom Hera options
+require("@danielx/hera/register/cjs").options.hera = heraOptions;
