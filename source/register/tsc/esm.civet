@@ -1,0 +1,11 @@
+{ type CompilerOptions, transpileTsToJs } from ./transpile.civet
+
+// This can module can be registered as an EMS loader
+let compilerOptions: CompilerOptions
+export function initialize(data: CompilerOptions = {})
+  compilerOptions = data
+
+{ transformLoadHook } from ../../esm.civet
+export load := transformLoadHook
+  (url) => /\.hera$/.test(url)
+  transpileTsToJs(., compilerOptions)

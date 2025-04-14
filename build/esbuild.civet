@@ -64,6 +64,8 @@ esbuild.build {
     "source/hera-types.civet"
     "source/register.civet"
     "source/register/cjs.civet"
+    "source/register/tsc/cjs.civet"
+    "source/register/tsc/esm.civet"
     "source/register/tsc/index.civet"
     "source/register/tsc/transpile.civet"
   ]

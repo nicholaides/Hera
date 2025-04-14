@@ -1,6 +1,6 @@
 typescript from typescript
 
-CompilerOptions ::= typescript.TranspileOptions['compilerOptions']
+export CompilerOptions ::= typescript.TranspileOptions['compilerOptions']
 LogFn ::= (...args: any[]) => any
 
 export function transpileTsToJs(
@@ -35,22 +35,3 @@ export function transpileTsToJs(
       throw new Error "TypeScript compilation failed"
 
   outputText
-
-
-// This can module can be registered as an EMS loader
-let compilerOptions: CompilerOptions
-export function initialize(data: CompilerOptions = {})
-  compilerOptions = data
-
-{ transformLoadHook } from ../../esm.civet
-export load := transformLoadHook
-  (url) => /\.hera$/.test(url)
-  transpileTsToJs(., compilerOptions)
-
-
-// Register this module as a CJS loader
-export function pushTranspileStepToCjsLoader(compilerOptions: CompilerOptions = {})
-  if heraChain: any := require.extensions?['.hera'] // only run if require.extensions exists
-    // add a transform step to the Hera CJS loader
-    heraChain.pushTransformSource (source: string) => transpileTsToJs(source, compilerOptions)
-
