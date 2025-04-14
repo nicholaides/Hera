@@ -1,48 +1,36 @@
 { fileURLToPath, pathToFileURL } from node:url
 fs from node:fs
 { compile } from ./main.civet
-
-
 import type { CompilerOptions } from ./compiler.civet
 
-export interface LoadHookResult
+
+export interface LoadHook
+  (url: string, context: Context, next: LoadHookNext): Promise<LoadHookResult> | LoadHookResult
+
+interface LoadHookResult
   source: string
   format: string
   shortCircuit: boolean
 
-export interface LoadHook
-  (url: string, context: Context, next: LoadHookNext): LoadHookResult
+interface LoadHookNext
+  (url: string, context: Context): Promise<LoadHookResult> | LoadHookResult
 
-export interface AsyncLoadHook
-  (url: string, context: Context, next: AsyncLoadHookNext): Promise<LoadHookResult>
-
-export interface LoadHookNext
-  (url: string, context: Context): LoadHookResult
-
-export interface AsyncLoadHookNext
-  (url: string, context: Context): Promise<LoadHookResult>
-
-
-export interface Context
+interface Context
   parentURL?: string
-
-export interface HeraLoaderOptions
-  hera?: CompilerOptions
-
-export PostProcessFn ::= (source: string, options: HeraLoaderOptions, loadContext: { url: string, context: Context }) => string
 
 
 baseURL := pathToFileURL(process.cwd() + "/").href
 extensionsRegex := /\.hera$/
 
 
+// module-level state that is set via the initialize function
 let heraOptions: CompilerOptions
 export function initialize(data: CompilerOptions = {})
   heraOptions = data
 
 
-export function resolve(specifier: string, context: Context, defaultResolve: (specifier: string, context: Context) => ???)
-  return defaultResolve(specifier, context) unless extensionsRegex.test(specifier)
+export function resolve(specifier: string, context: Context, next: (specifier: string, context: Context) => ???)
+  return next(specifier, context) unless extensionsRegex.test(specifier)
 
   { parentURL = baseURL } := context
 
@@ -51,11 +39,11 @@ export function resolve(specifier: string, context: Context, defaultResolve: (sp
     shortCircuit: true
   }
 
+
 export function load(url: string, context: Context, next: LoadHookNext)
   return next(url, context) unless extensionsRegex.test(url)
 
   filename := fileURLToPath(url)
-
   source :=
     filename
       |> fs.readFileSync(., "utf8")
@@ -69,10 +57,11 @@ export function load(url: string, context: Context, next: LoadHookNext)
     shortCircuit: true
   }
 
+
 export function transformLoadHook(
   matchUrl: (url: string) => boolean
-  fn: (source: string, context: Context, result: LoadHookResult) => string|Promise<string>
-): AsyncLoadHook
+  fn: (source: string, context: Context, result: LoadHookResult) => string | Promise<string>
+): LoadHook
   async (url, context, next) =>
     result := await next(url, context)
 
