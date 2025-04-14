@@ -4,13 +4,14 @@ shopt -s globstar
 
 cd "$(dirname "$0")/.."
 
-# This script uses the current verion of the hera, built from source via `yarn build`
+export NODE_OPTIONS='--require=./node_modules/@danielx/hera/register'
+export PATH="$PWD/node_modules/.bin:$PATH"
 
 rm -rf ./parsers
 mkdir -p ./parsers
 
 function compile_parser() {
-  ./dist/hera --types < "$1" > "parsers/$(basename "$1").ts"
+  civet source/cli.civet --types --libPath ../source/machine < "$1" > "parsers/$(basename "$1").ts"
 }
 
 compile_parser samples/code.hera
