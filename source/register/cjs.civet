@@ -1,47 +1,68 @@
-assert from node:assert
+// This module is a stateful singleton because it it used to modify the behavior
+// of Node.js when loading .hera files
 
+assert from node:assert
 type { Module } from node:module
 type { CompilerOptions as HeraCompilerOptions } from ../compiler.civet
 
-type Middleware = (payload: Payload, next: (payload: Payload) => Payload) => Payload
 
-interface Payload
+// Middlewares:
+// - may call `next` in order to get the payload from the next middleware down the stack.
+//   The middleware on the bottom of the stack cannot call `next`.
+// - must return a Payload that is then passed to the previous middleware.
+export type Middleware = (payload: Payload, next: (payload: Payload) => Payload) => Payload
+
+export interface Payload
   source?: string
   filename?: string
 
-function runMiddlewares([...stack, current]: Middleware[], payload: Payload): Payload
-  if !current then throw new Error("Ran out of middlewares to run")
-  current(payload, (nextContext: Payload) => runMiddlewares(stack, nextContext))
 
+// Execute the middlewares in LIFO order
+function executeMiddlewareStack([...stack, current]: Middleware[], payload: Payload): Payload
+  if !current then throw new Error("Ran out of middlewares to run")
+  current(payload, (nextContext: Payload) => executeMiddlewareStack(stack, nextContext))
+
+
+// Stack of middlewares that get executed in LIFO order
+// Consumers may modify the stack
 export middlewares: Middleware[] := []
 
-export options := {
-  hera: {} as HeraCompilerOptions
-}
+// Options that are passed to the Hera compiler
+// Comsumers may modify the options passed to the compiler
+export options := { hera: {} as HeraCompilerOptions }
 
+// Helper function for adding a middleware that transforms the source and retains the rest of the payload
 export function pushTransformSource(transform: (source: string, payload: Payload) => string)
   middlewares.push (payload, next) =>
     result := next(payload)
     assert result.source
     { ...result, source: transform(result.source, result) }
 
-export pushMiddleware := middlewares@push
-
 
 if require.extensions
   try
     require "@cspotcode/source-map-support/register-hook-require"
 
-  require.extensions[".hera"] = (module: Module, filename: string) =>
-    runMiddlewares(middlewares, { filename })
-      |> .source
-      ||> assert(., `file ${filename} was loaded without providing source code`)
-      |> (module as any)._compile(., filename)
 
+  // Set up default middleware stack
   { readFileSync } := require("fs")
-  pushMiddleware (payload) =>
-    { ...payload, source: readFileSync(payload.filename, "utf8") }
-
   { compile: heraCompile } := require("../main.civet")
+
+  // Step: read the file
+  middlewares.push (payload) => { ...payload, source: readFileSync(payload.filename, "utf8") }
+
+  // Step: compile the source
   pushTransformSource (source, { filename }) =>
-    heraCompile(source, { filename, inlineMap: true, ...options.hera })
+    heraCompile source, {
+      filename,
+      inlineMap: true,
+      ...options.hera // these options may be set by consumers of this module
+    }
+
+
+  require.extensions[".hera"] =
+    function loadHera(module: Module, filename: string)
+      executeMiddlewareStack(middlewares, { filename })
+        |> .source
+        ||> assert(., `.hera loader extension middleware could not produce source code for ${filename}`)
+        |> (module as any)._compile(., filename)
