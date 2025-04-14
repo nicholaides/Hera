@@ -25,7 +25,7 @@ export function transpileTsToJs(
     if log
       log
         typescript.formatDiagnosticsWithColorAndContext diagnostics, {
-          /* c8 ignore next -- ts requires it */
+          /* c8 ignore next */
           getCanonicalFileName: (path) => path
           getNewLine: => typescript.sys.newLine
           typescript.sys.getCurrentDirectory
