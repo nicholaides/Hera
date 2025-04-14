@@ -1,3 +1,5 @@
+assert from node:assert
+
 type { Module } from node:module
 type { CompilerOptions as HeraCompilerOptions } from ../compiler.civet
 
@@ -5,7 +7,11 @@ if require.extensions
   try
     require "@cspotcode/source-map-support/register-hook-require"
 
-  type Context = any
+  interface Context {
+    source?: string
+    filename?: string
+  }
+
   type Middleware = (context: Context, next: (context: Context) => Context) => Context
 
   function requireExtensionsChain()
@@ -15,12 +21,14 @@ if require.extensions
     function pushTransformSource(fn: (source: string, context: Context) => string)
         middlewares.push (context, next) =>
           result := next(context)
+          assert result.source
           return { ...result, source: fn(result.source, result) }
 
     function handleExtension(module: Module, filename: string)
       mod := module as Module & { _compile: (source: string, filename: string) =>  }
-      runMiddlewares(middlewares, { filename, source: undefined })
+      runMiddlewares(middlewares, { filename })
         |> .source
+        ||> assert ., `file ${filename} was loaded without providig source code`
         |> mod._compile(., filename)
 
     Object.assign handleExtension, {
@@ -29,7 +37,7 @@ if require.extensions
       pushTransformSource
     }
 
-  function runMiddlewares([...stack, current]: Middleware[], context: Context)
+  function runMiddlewares([...stack, current]: Middleware[], context: Context): Context
     if !current then throw new Error `Failed to load ${JSON.stringify(context)}`
 
     current(context, (nextContext: Context) => runMiddlewares(stack, nextContext))
